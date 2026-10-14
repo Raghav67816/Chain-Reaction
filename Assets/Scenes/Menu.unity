@@ -169,7 +169,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -374,6 +374,7 @@ GameObject:
   m_Component:
   - component: {fileID: 940061911}
   - component: {fileID: 940061910}
+  - component: {fileID: 940061912}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -454,6 +455,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &940061912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940061909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae3abdd3b29890d46a68e38c2825ad4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpriteAnimator
+  frames:
+  - {fileID: 951440097448686847, guid: b15f36f7282750047925c3e8e6106251, type: 3}
+  - {fileID: 1658087982670268620, guid: accef3e25ad94184385e50259384a4cd, type: 3}
+  - {fileID: 4339266464721200574, guid: dbb008f0cee33224b8c526eece503e61, type: 3}
+  fps: 14
+  loopAnimation: 1
+  uIDocument: {fileID: 0}
+  imageName: Server
 --- !u!1 &1406319406
 GameObject:
   m_ObjectHideFlags: 0
