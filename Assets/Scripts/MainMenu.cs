@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class MainMenu: MonoBehaviour
@@ -37,7 +38,7 @@ public class MainMenu: MonoBehaviour
     void OnPlayClicked(ClickEvent evnt)
     {
         BeepSound.Instance.PlayAudio();
-        Debug.Log("Play clicked");
+        SceneManager.LoadScene(1);
     }
 
     void OnExitClicked(ClickEvent evnt)
