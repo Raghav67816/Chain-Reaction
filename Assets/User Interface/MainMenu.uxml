@@ -11,7 +11,7 @@
             <ui:VisualElement name="ButtonBox" class="button-box" style="flex-grow: 0; top: 20%; flex-direction: row; align-items: center; justify-content: center; align-self: center; position: relative; align-content: center; flex-wrap: nowrap; width: 100%;">
                 <ui:Button text="Start Shift" name="StartButton" class="button normal-button"/>
                 <ui:Button text="Settings" name="SettingsButton" class="normal-button"/>
-                <ui:Button text="Exit Shift" name="ExitShiftButton" class="danger-button"/>
+                <ui:Button text="Exit Shift" name="ExitButton" class="danger-button"/>
             </ui:VisualElement>
             <ui:VisualElement name="Signal" style="flex-grow: 0; top: 20%;"/>
         </ui:VisualElement>
