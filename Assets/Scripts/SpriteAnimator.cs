@@ -1,74 +1,75 @@
 using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using System.Collections.Generic;
 
 // Adding support for GIF like animations in Unity's new UI Toolkit
 
 public class SpriteAnimator : MonoBehaviour
 {
-    [Header("Frames")]
-    public List<Sprite> frames = new List<Sprite>();
+    [Header("Animaiton")]
     public int fps = 14;
-    public bool loopAnimation = true;
     private int currentFrame = 0;
+    public List<Sprite> frames;
+    public bool loopAnimation = true;
 
-    [Header("UI")]
-    public VisualTreeAsset uIDocument;
-    public String imageName;
-    private Image targetImage = null;
-    
-    private Coroutine animationCoroutine;
+    [Header("Target")]
+    public UIDocument uIDocument;
+    public string imageName;
+    private Image targetImage;
+
+    private Coroutine animation;
+
 
     void Start()
     {
-        if(frames.Count > 0 && targetImage != null && uIDocument != null)
+        if(uIDocument != null && fps > 0)
         {
+            VisualElement root = uIDocument.rootVisualElement;
+            targetImage = root.Q<Image>(imageName);
             PlayAnimation();
-        }
-
-        VisualElement root = uIDocument.CloneTree();
-        if (root != null)
-        {
-            Debug.Log("Root is not null");
-        }
-        
-        targetImage = root.Q<Image>(imageName);
-        if(targetImage != null)
-        {
-            Debug.Log("Image found in the visual tree.");
         }
     }
 
     void PlayAnimation()
     {
-        if(animationCoroutine != null) PlayAnimation();
-        animationCoroutine = StartCoroutine(SpriteAnimation());
-    }
+        if(animation == null)
+        {
+            animation = StartCoroutine(SpriteAnimation());
+        }
 
+        else
+        {
+            StartCoroutine(animation.ToString());
+        }
+    }
     void StopAnimation()
     {
-        if(animationCoroutine != null) StopCoroutine(animationCoroutine);
+        if(animation != null)
+        {
+            StopCoroutine(animation);
+        }
     }
 
-    private System.Collections.IEnumerator SpriteAnimation()
+    System.Collections.IEnumerator SpriteAnimation()
     {
-        float timePerFrame = 1f/fps;
+        float time = 1f/fps;
         while (true)
         {
             targetImage.sprite = frames[currentFrame];
-            yield return new WaitForSeconds(timePerFrame);
-
+            yield return new WaitForSeconds(time);
             currentFrame++;
 
             if(currentFrame >= frames.Count)
             {
-                if(loopAnimation) currentFrame++;
+                if (loopAnimation)
+                {
+                    currentFrame = 0;
+                }
+
                 else
                 {
                     StopAnimation();
-                    break;
                 }
             }
         }
