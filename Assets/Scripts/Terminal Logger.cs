@@ -3,6 +3,7 @@ using TMPro;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TerminalLogger : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class TerminalLogger : MonoBehaviour
     private string[] logs;
     private int randomIdx = 2;
     private bool isMalfunctioning = false;
+    private int logIndex = 0;
 
     [Header("Duration")]
     public float maxWaitTime = 1f;
@@ -37,15 +39,15 @@ public class TerminalLogger : MonoBehaviour
 
     IEnumerator TerminalAnimation()
     {
-        int idx = 0;
-        while (idx < logs.Length)
+        logIndex = 0;
+        while (logIndex < logs.Length)
         {
-            if (idx == randomIdx && !isMalfunctioning)
+            if (logIndex == randomIdx && !isMalfunctioning)
             {
                 yield return StartCoroutine(Malfunction());
             }
 
-            textField.text += "\n" + logs[idx];
+            textField.text += "\n" + logs[logIndex];
 
             if(BeepSound.Instance != null)
             {
@@ -54,7 +56,7 @@ public class TerminalLogger : MonoBehaviour
 
             yield return new WaitForSeconds(UnityEngine.Random.Range(minWaitTime, maxWaitTime));
 
-            idx++;
+            logIndex++;
         }
     }
 
@@ -69,11 +71,16 @@ public class TerminalLogger : MonoBehaviour
 
         UnityEngine.WaitForSeconds waitTime = new WaitForSeconds(UnityEngine.Random.Range(minWaitTime, maxWaitTime));
 
-        textField.enabled = false;
         yield return waitTime;
+        textField.enabled = true;
+
+        if(logIndex >= logs.Length)
+        {
+            textField.enabled = false;
+        }
 
         malfunctionText.enabled = true;
 
-        yield return new WaitForSeconds(1f);
+        SceneManager.LoadSceneAsync(2);
     }
 }
