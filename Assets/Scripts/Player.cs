@@ -1,21 +1,21 @@
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
     // player objects
+    private Animator animator;
     private Rigidbody2D playerBody;
     private PlayerControls playerControls;
 
     [Header("Body")]
     public float bodyMass = 80.0f; // in kg
+    private bool isFacingRight = true;
 
     [Header("Ground Check")]
     public Transform groundCheck;
     public LayerMask groundLayer;
 
     [Header("Movement")]
-    private float gravity = -9.8f;
     private bool isOnGround = true;
     public float moveSpeed = 5f;
     public float jumpHeight = 2f;
@@ -35,6 +35,9 @@ public class Player : MonoBehaviour
     {
         playerBody = GetComponent<Rigidbody2D>();
         playerBody.mass = bodyMass;
+
+        animator = GetComponent<Animator>();
+        animator.SetBool("isRunning", false);
     }
 
     void FixedUpdate()
@@ -50,6 +53,36 @@ public class Player : MonoBehaviour
         isOnGround = Physics2D.OverlapCircle(
             groundCheck.position, 0.2f, groundLayer
         );
+
+        animator.SetBool("isOnGround", isOnGround);
+
+        if (Mathf.Abs(moveInput) > 0f)
+        {
+            animator.SetBool("isRunning", true);
+        }
+
+        else
+        {
+            animator.SetBool("isRunning", false);
+        }
+
+        if (moveInput > 0f && !isFacingRight)
+        {
+            Flip();
+        }
+
+        if(moveInput < 0f && isFacingRight)
+        {
+            Flip();
+        }
+    }
+
+    void Flip()
+    {
+        isFacingRight = !isFacingRight;
+        Vector3 localScale = transform.localScale;
+        localScale.x *= -1f;
+        transform.localScale = localScale;
     }
 
     void Jump()
@@ -57,7 +90,7 @@ public class Player : MonoBehaviour
         if (isOnGround)
         {
             playerBody.linearVelocity = new Vector2(
-                playerBody.linearVelocityX, jumpHeight
+                playerBody.linearVelocity.x, jumpHeight
             );
         }
     }
@@ -74,7 +107,7 @@ public class Player : MonoBehaviour
 
     void OnDrawGizmosSelected()
     {
-        if(groundCheck != null)
+        if (groundCheck != null)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(groundCheck.position, 0.2f);
