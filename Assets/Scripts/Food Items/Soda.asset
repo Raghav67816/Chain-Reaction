@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d102f9a61f8b2484082c9865c6ff1b00, type: 3}
+  m_Name: Soda
+  m_EditorClassIdentifier: Assembly-CSharp::Food
+  foodName: Chicken
+  massValue: 1000
+  foodSprite: {fileID: -7782623459120347722, guid: 170f996c83395b54b92fe14db9a595f5, type: 3}

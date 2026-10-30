@@ -9,6 +9,9 @@ public class Player : MonoBehaviour
     private AudioSource playerAudio;
     private PlayerControls playerControls;
 
+    [Header("Effects")]
+    public ParticleSystem eatBurst;
+
     [Header("Sounds")]
     public List<AudioClip> jumpSounds;
 
@@ -107,6 +110,18 @@ public class Player : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        FoodItem foodItem = collision.GetComponent<FoodItem>();
+        if (foodItem != null && eatBurst != null)
+        {
+            playerBody.mass += foodItem.foodData.massValue;
+
+            Instantiate(eatBurst, collision.transform.position, Quaternion.identity);
+            Destroy(collision.gameObject);
+        }
+    }
+
     void OnDisable()
     {
         playerControls.Disable();
@@ -125,5 +140,4 @@ public class Player : MonoBehaviour
             Gizmos.DrawWireSphere(groundCheck.position, 0.2f);
         }
     }
-
 }
