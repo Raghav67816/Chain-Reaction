@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -5,7 +6,11 @@ public class Player : MonoBehaviour
     // player objects
     private Animator animator;
     private Rigidbody2D playerBody;
+    private AudioSource playerAudio;
     private PlayerControls playerControls;
+
+    [Header("Sounds")]
+    public List<AudioClip> jumpSounds;
 
     [Header("Body")]
     public float bodyMass = 80.0f; // in kg
@@ -15,11 +20,12 @@ public class Player : MonoBehaviour
     public Transform groundCheck;
     public LayerMask groundLayer;
 
+
     [Header("Movement")]
-    private bool isOnGround = true;
     public float moveSpeed = 5f;
     public float jumpHeight = 2f;
     public float moveInput;
+    private bool isOnGround = true;
 
     void Awake()
     {
@@ -38,6 +44,8 @@ public class Player : MonoBehaviour
 
         animator = GetComponent<Animator>();
         animator.SetBool("isRunning", false);
+
+        playerAudio = GetComponent<AudioSource>();
     }
 
     void FixedUpdate()
@@ -92,6 +100,10 @@ public class Player : MonoBehaviour
             playerBody.linearVelocity = new Vector2(
                 playerBody.linearVelocity.x, jumpHeight
             );
+
+            
+            int soundIdx = Random.Range(0, jumpSounds.Count);
+            playerAudio.PlayOneShot(jumpSounds[soundIdx]);
         }
     }
 
