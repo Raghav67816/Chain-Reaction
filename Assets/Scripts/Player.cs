@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -17,7 +19,9 @@ public class Player : MonoBehaviour
 
     [Header("Body")]
     public float bodyMass = 80.0f; // in kg
+    public float playerHealth = 100f;
     private bool isFacingRight = true;
+    private float immediateGas = 0f;
 
     [Header("Ground Check")]
     public Transform groundCheck;
@@ -29,6 +33,10 @@ public class Player : MonoBehaviour
     public float jumpHeight = 2f;
     public float moveInput;
     private bool isOnGround = true;
+
+    [Header("UI Elements")]
+    public Slider healthSlider;
+    public Slider gasSlider;
 
     void Awake()
     {
@@ -82,7 +90,7 @@ public class Player : MonoBehaviour
             Flip();
         }
 
-        if(moveInput < 0f && isFacingRight)
+        if (moveInput < 0f && isFacingRight)
         {
             Flip();
         }
@@ -96,6 +104,25 @@ public class Player : MonoBehaviour
         transform.localScale = localScale;
     }
 
+    System.Collections.IEnumerator UpdateSlider(
+        Slider slider,
+        float targetValue
+    )
+    {
+        while(slider.value < targetValue)
+        {
+            slider.value = Mathf.Lerp(
+                slider.value,
+                targetValue,
+                Time.deltaTime * 0.5f
+            );
+
+            yield return null;
+        }
+
+        slider.value = targetValue;
+    }
+
     void Jump()
     {
         if (isOnGround)
@@ -104,7 +131,7 @@ public class Player : MonoBehaviour
                 playerBody.linearVelocity.x, jumpHeight
             );
 
-            
+
             int soundIdx = Random.Range(0, jumpSounds.Count);
             playerAudio.PlayOneShot(jumpSounds[soundIdx]);
         }
@@ -113,12 +140,12 @@ public class Player : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         FoodItem foodItem = collision.GetComponent<FoodItem>();
-        if (foodItem != null && eatBurst != null)
+        if (foodItem != null)
         {
             playerBody.mass += foodItem.foodData.massValue;
-
-            Instantiate(eatBurst, collision.transform.position, Quaternion.identity);
             Destroy(collision.gameObject);
+
+            StartCoroutine(UpdateSlider(gasSlider, playerBody.mass * 2 /100));
         }
     }
 
