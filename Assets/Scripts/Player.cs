@@ -1,7 +1,7 @@
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Numerics;
+using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
@@ -21,7 +21,6 @@ public class Player : MonoBehaviour
     public float bodyMass = 80.0f; // in kg
     public float playerHealth = 100f;
     private bool isFacingRight = true;
-    private float immediateGas = 0f;
 
     [Header("Ground Check")]
     public Transform groundCheck;
@@ -31,8 +30,10 @@ public class Player : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float jumpHeight = 2f;
+    public float dashDuration = 0.3f;
     public float moveInput;
     private bool isOnGround = true;
+    private bool isDashing = false;
 
     [Header("UI Elements")]
     public Slider healthSlider;
@@ -46,6 +47,8 @@ public class Player : MonoBehaviour
         playerControls.Keyboard.Move.canceled += ctx => moveInput = 0f;
 
         playerControls.Keyboard.Jump.performed += ctx => Jump();
+
+        playerControls.Keyboard.Release.performed += ctx => ReleaseGas();
     }
 
     void Start()
@@ -57,14 +60,19 @@ public class Player : MonoBehaviour
         animator.SetBool("isRunning", false);
 
         playerAudio = GetComponent<AudioSource>();
+
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void FixedUpdate()
     {
-        playerBody.linearVelocity = new Vector2(
-            moveInput * moveSpeed,
-            playerBody.linearVelocity.y
-        );
+        if (!isDashing)
+        {
+            playerBody.linearVelocity = new UnityEngine.Vector2(
+                moveInput * moveSpeed,
+                playerBody.linearVelocity.y
+            );
+        }
     }
 
     void Update()
@@ -99,22 +107,22 @@ public class Player : MonoBehaviour
     void Flip()
     {
         isFacingRight = !isFacingRight;
-        Vector3 localScale = transform.localScale;
+        UnityEngine.Vector3 localScale = transform.localScale;
         localScale.x *= -1f;
         transform.localScale = localScale;
     }
 
-    System.Collections.IEnumerator UpdateSlider(
+    System.Collections.IEnumerator IncreaseSlider(
         Slider slider,
         float targetValue
     )
     {
-        while(slider.value < targetValue)
+        while (slider.value < targetValue)
         {
             slider.value = Mathf.Lerp(
                 slider.value,
                 targetValue,
-                Time.deltaTime * 0.5f
+                Time.deltaTime * 2f
             );
 
             yield return null;
@@ -123,17 +131,65 @@ public class Player : MonoBehaviour
         slider.value = targetValue;
     }
 
+    System.Collections.IEnumerator DecreaseSlider(
+        Slider slider,
+        float targetValue
+    )
+    {
+        while (slider.value > targetValue)
+        {
+            slider.value = Mathf.Lerp(
+                slider.value,
+                targetValue,
+                Time.deltaTime * 2f
+            );
+
+            yield return null;
+        }
+    }
+
     void Jump()
     {
         if (isOnGround)
         {
-            playerBody.linearVelocity = new Vector2(
+            playerBody.linearVelocity = new UnityEngine.Vector2(
                 playerBody.linearVelocity.x, jumpHeight
             );
 
 
             int soundIdx = Random.Range(0, jumpSounds.Count);
             playerAudio.PlayOneShot(jumpSounds[soundIdx]);
+        }
+    }
+
+    System.Collections.IEnumerator GasDash(UnityEngine.Vector2 direction, float thrust)
+    {
+        isDashing = true;
+        playerBody.AddForce(
+            direction * thrust,
+            ForceMode2D.Impulse
+        );
+
+        yield return new WaitForSeconds(dashDuration);
+        isDashing = false;
+        gasSlider.value = 0f;
+    }
+
+    void ReleaseGas()
+    {
+        if (gasSlider.value > 0f)
+        {
+            float thrust = gasSlider.value * 500f;
+            UnityEngine.Vector2 direction = isFacingRight ? transform.right : -transform.right;
+
+            playerBody.AddForce(
+                direction * thrust,
+                ForceMode2D.Impulse
+            );
+
+            StartCoroutine(DecreaseSlider(gasSlider, 0f));
+            StopAllCoroutines();
+            StartCoroutine(GasDash(direction, thrust));
         }
     }
 
@@ -145,7 +201,7 @@ public class Player : MonoBehaviour
             playerBody.mass += foodItem.foodData.massValue;
             Destroy(collision.gameObject);
 
-            StartCoroutine(UpdateSlider(gasSlider, playerBody.mass * 2 /100));
+            StartCoroutine(IncreaseSlider(gasSlider, playerBody.mass * 2 / 100));
         }
     }
 

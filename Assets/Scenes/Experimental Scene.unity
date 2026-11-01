@@ -6304,7 +6304,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1090052377}
   m_FillRect: {fileID: 1090052376}
   m_HandleRect: {fileID: 0}
@@ -6742,6 +6742,7 @@ MonoBehaviour:
     m_Bits: 64
   moveSpeed: 5
   jumpHeight: 6
+  dashDuration: 0.3
   moveInput: 0
   healthSlider: {fileID: 1851074693}
   gasSlider: {fileID: 2001925315}

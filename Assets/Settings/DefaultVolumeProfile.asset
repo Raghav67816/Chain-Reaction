@@ -287,7 +287,7 @@ MonoBehaviour:
     m_Value: 0
   blueOutBlueIn:
     m_OverrideState: 1
-    m_Value: 100
+    m_Value: 118
 --- !u!114 &-3978695733392391637
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -744,12 +744,12 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.378
+    m_Value: 0.459
   smoothness:
     m_OverrideState: 1
-    m_Value: 0.2
+    m_Value: 0.266
   rounded:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
 --- !u!114 &9099548931283147545
 MonoBehaviour:
