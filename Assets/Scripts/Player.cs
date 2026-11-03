@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Numerics;
 using System.Collections.Generic;
+using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class Player : MonoBehaviour
 
     [Header("Sounds")]
     public List<AudioClip> jumpSounds;
+    public List<AudioClip> walkSounds;
 
     [Header("Body")]
     public float bodyMass = 80.0f; // in kg
@@ -33,6 +35,7 @@ public class Player : MonoBehaviour
     public float dashDuration = 0.3f;
     public float moveInput;
     private bool isOnGround = true;
+    private float defaultMoveSpeed = 5f;
     private bool isDashing = false;
 
     [Header("UI Elements")]
@@ -42,13 +45,6 @@ public class Player : MonoBehaviour
     void Awake()
     {
         playerControls = new PlayerControls();
-
-        playerControls.Keyboard.Move.performed += ctx => moveInput = ctx.ReadValue<float>();
-        playerControls.Keyboard.Move.canceled += ctx => moveInput = 0f;
-
-        playerControls.Keyboard.Jump.performed += ctx => Jump();
-
-        playerControls.Keyboard.Release.performed += ctx => ReleaseGas();
     }
 
     void Start()
@@ -148,17 +144,13 @@ public class Player : MonoBehaviour
         }
     }
 
-    void Jump()
+    void Jump(InputAction.CallbackContext ctx)
     {
         if (isOnGround)
         {
             playerBody.linearVelocity = new UnityEngine.Vector2(
                 playerBody.linearVelocity.x, jumpHeight
             );
-
-
-            int soundIdx = Random.Range(0, jumpSounds.Count);
-            playerAudio.PlayOneShot(jumpSounds[soundIdx]);
         }
     }
 
@@ -173,9 +165,23 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(dashDuration);
         isDashing = false;
         gasSlider.value = 0f;
+
+        moveSpeed = defaultMoveSpeed;
     }
 
-    void ReleaseGas()
+    void PlayWalkSound()
+    {
+        int randomIndex = Random.Range(0, walkSounds.Count);
+        playerAudio.PlayOneShot(walkSounds[randomIndex]);
+    }
+
+    void PlayJumpSound()
+    {
+        int randomIndex = Random.Range(0, jumpSounds.Count);
+        playerAudio.PlayOneShot(jumpSounds[randomIndex]);
+    }
+
+    void ReleaseGas(InputAction.CallbackContext ctx)
     {
         if (gasSlider.value > 0f)
         {
@@ -193,12 +199,33 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void SetMoveInput(float value)
+    {
+        moveInput = value;
+    }
+
+    private void OnMoveInput(InputAction.CallbackContext ctx)
+    {
+        SetMoveInput(ctx.ReadValue<float>());
+    }
+
+    private void MoveInputCancel(InputAction.CallbackContext ctx)
+    {
+        SetMoveInput(0f);
+    }
+
     void OnTriggerEnter2D(Collider2D collision)
     {
         FoodItem foodItem = collision.GetComponent<FoodItem>();
         if (foodItem != null)
         {
             playerBody.mass += foodItem.foodData.massValue;
+            float retardValue = Mathf.Abs(foodItem.foodData.massValue / 1000);
+
+            if (moveSpeed - retardValue >= 0f)
+            {
+                moveSpeed -= retardValue;
+            }
             Destroy(collision.gameObject);
 
             StartCoroutine(IncreaseSlider(gasSlider, playerBody.mass * 2 / 100));
@@ -207,11 +234,22 @@ public class Player : MonoBehaviour
 
     void OnDisable()
     {
+        playerControls.Keyboard.Move.performed -= MoveInputCancel;
+        playerControls.Keyboard.Move.canceled -= MoveInputCancel;
+        playerControls.Keyboard.Jump.performed -= Jump;
+
+        playerControls.Keyboard.Release.performed -= ReleaseGas;
         playerControls.Disable();
     }
 
     void OnEnable()
     {
+        playerControls.Keyboard.Move.performed += OnMoveInput;
+        playerControls.Keyboard.Move.canceled += MoveInputCancel;
+
+        playerControls.Keyboard.Jump.performed += Jump;
+
+        playerControls.Keyboard.Release.performed += ReleaseGas;
         playerControls.Enable();
     }
 
