@@ -15,3 +15,4 @@ MonoBehaviour:
   foodName: Bread
   massValue: 200
   foodSprite: {fileID: 2280896472503784695, guid: c7bf1476a7f7c874a828c51f74559361, type: 3}
+  burstColor: {r: 0.53333336, g: 0.3254902, b: 0.23529413, a: 0}

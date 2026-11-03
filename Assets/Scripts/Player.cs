@@ -14,6 +14,8 @@ public class Player : MonoBehaviour
 
     [Header("Effects")]
     public ParticleSystem eatBurst;
+    public ParticleSystem landEffect;
+    public ParticleSystem dashEffect;
 
     [Header("Sounds")]
     public List<AudioClip> jumpSounds;
@@ -22,6 +24,9 @@ public class Player : MonoBehaviour
     [Header("Body")]
     public float bodyMass = 80.0f; // in kg
     public float playerHealth = 100f;
+    public Transform foot;
+    public Transform back;
+
     private bool isFacingRight = true;
 
     [Header("Ground Check")]
@@ -193,10 +198,17 @@ public class Player : MonoBehaviour
                 ForceMode2D.Impulse
             );
 
+            Instantiate(dashEffect, back.transform.position, UnityEngine.Quaternion.identity);
+
             StartCoroutine(DecreaseSlider(gasSlider, 0f));
             StopAllCoroutines();
             StartCoroutine(GasDash(direction, thrust));
         }
+    }
+
+    void PlayLandingEffect()
+    {
+        Instantiate(landEffect, foot.position, UnityEngine.Quaternion.identity);
     }
 
     private void SetMoveInput(float value)
@@ -226,6 +238,8 @@ public class Player : MonoBehaviour
             {
                 moveSpeed -= retardValue;
             }
+
+            Instantiate(eatBurst, collision.transform.position, UnityEngine.Quaternion.identity);
             Destroy(collision.gameObject);
 
             StartCoroutine(IncreaseSlider(gasSlider, playerBody.mass * 2 / 100));

@@ -6,4 +6,5 @@ public class Food : ScriptableObject
     public string foodName;
     public float massValue;
     public Sprite foodSprite;
+    public Color burstColor;
 }

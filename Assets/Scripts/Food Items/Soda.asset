@@ -15,3 +15,4 @@ MonoBehaviour:
   foodName: Chicken
   massValue: 1000
   foodSprite: {fileID: -7782623459120347722, guid: 170f996c83395b54b92fe14db9a595f5, type: 3}
+  burstColor: {r: 0.7411765, g: 0.26666668, b: 0.30980393, a: 0}
