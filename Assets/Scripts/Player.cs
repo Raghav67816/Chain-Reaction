@@ -1,8 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Numerics;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using Unity.Cinemachine;
 
 public class Player : MonoBehaviour
 {
@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     private Rigidbody2D playerBody;
     private AudioSource playerAudio;
     private PlayerControls playerControls;
+    private CinemachineImpulseSource impulseSource;
 
     [Header("Effects")]
     public ParticleSystem eatBurst;
@@ -55,6 +56,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         playerBody = GetComponent<Rigidbody2D>();
+        impulseSource = GetComponent<CinemachineImpulseSource>();
         playerBody.mass = bodyMass;
 
         animator = GetComponent<Animator>();
@@ -69,7 +71,7 @@ public class Player : MonoBehaviour
     {
         if (!isDashing)
         {
-            playerBody.linearVelocity = new UnityEngine.Vector2(
+            playerBody.linearVelocity = new Vector2(
                 moveInput * moveSpeed,
                 playerBody.linearVelocity.y
             );
@@ -191,7 +193,7 @@ public class Player : MonoBehaviour
         if (gasSlider.value > 0f)
         {
             float thrust = gasSlider.value * 500f;
-            UnityEngine.Vector2 direction = isFacingRight ? transform.right : -transform.right;
+            Vector2 direction = isFacingRight ? transform.right : -transform.right;
 
             playerBody.AddForce(
                 direction * thrust,
@@ -199,6 +201,8 @@ public class Player : MonoBehaviour
             );
 
             Instantiate(dashEffect, back.transform.position, UnityEngine.Quaternion.identity);
+
+            impulseSource.GenerateImpulseWithForce(1f);
 
             StartCoroutine(DecreaseSlider(gasSlider, 0f));
             StopAllCoroutines();
