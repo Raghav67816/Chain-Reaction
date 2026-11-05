@@ -1,10 +1,9 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Inventory Item", menuName = "Scriptable Objects/Item")]
-public class IItem : ScriptableObject
+[CreateAssetMenu(fileName = "InventoryItem", menuName = "Scriptable Objects/InventoryItem")]
+public class InventoryItem : ScriptableObject
 {
     public string itemName;
-    public int category;
-    public int damage;
-    public int damageRadius;
+    public string category;
+    public Sprite sprite;
 }

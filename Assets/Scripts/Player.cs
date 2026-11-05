@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using Unity.Cinemachine;
+using System;
 
 public class Player : MonoBehaviour
 {
@@ -12,6 +13,9 @@ public class Player : MonoBehaviour
     private AudioSource playerAudio;
     private PlayerControls playerControls;
     private CinemachineImpulseSource impulseSource;
+
+    // Events
+    public static event Action<InventoryItem, GameObject> OnItemInteraction;
 
     [Header("Effects")]
     public ParticleSystem eatBurst;
@@ -178,13 +182,13 @@ public class Player : MonoBehaviour
 
     void PlayWalkSound()
     {
-        int randomIndex = Random.Range(0, walkSounds.Count);
+        int randomIndex = UnityEngine.Random.Range(0, walkSounds.Count);
         playerAudio.PlayOneShot(walkSounds[randomIndex]);
     }
 
     void PlayJumpSound()
     {
-        int randomIndex = Random.Range(0, jumpSounds.Count);
+        int randomIndex = UnityEngine.Random.Range(0, jumpSounds.Count);
         playerAudio.PlayOneShot(jumpSounds[randomIndex]);
     }
 
@@ -233,6 +237,13 @@ public class Player : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         FoodItem foodItem = collision.GetComponent<FoodItem>();
+        InventoryItemMono item = collision.GetComponent<InventoryItemMono>();
+
+        if(item != null)
+        {
+            OnItemInteraction?.Invoke(item?.item, item?.gameObject);
+        }
+
         if (foodItem != null)
         {
             playerBody.mass += foodItem.foodData.massValue;
