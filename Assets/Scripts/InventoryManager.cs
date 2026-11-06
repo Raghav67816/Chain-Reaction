@@ -2,8 +2,15 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class ItemEntry
+{
+    public int count;
+    public Sprite sprite;
+}
+
+public class InventoryManager : MonoBehaviour
 {
     [Header("Items")]
     public InventoryItem[] items;
@@ -14,8 +21,9 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
     [Header("UI References")]
     public Image[] itemImages;
+    public TextMeshProUGUI[] itemCountTexts;
 
-    private Dictionary<string, int> inventory = new Dictionary<string, int>();
+    private Dictionary<string, ItemEntry> inventory = new Dictionary<string, ItemEntry>();
 
     void Awake()
     {
@@ -48,9 +56,9 @@ public class NewMonoBehaviourScript : MonoBehaviour
         if (inventory.Count >= maxSlots - 1)
         {
             int totalItems = 0;
-            foreach (int itemCount in inventory.Values)
+            foreach (ItemEntry entry in inventory.Values)
             {
-                totalItems += itemCount;
+                totalItems += entry.count;
             }
 
             if (totalItems >= maxSlots * itemPerSlot)
@@ -62,16 +70,17 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
         else
         {
-            int itemCount;
-            if (inventory.TryGetValue(item.name, out itemCount))
+            ItemEntry itemEntry;
+            if (inventory.TryGetValue(item.name, out itemEntry))
             {
-                if (itemCount < itemPerSlot)
+                if (itemEntry.count < itemPerSlot)
                 {
-                    inventory[item.name]++;
+                    inventory[item.name].count++;
+                    UpdateItemCountUI(item, inventory[item.name].count);
                     return true;
                 }
 
-                if (itemCount >= itemPerSlot)
+                if (itemEntry.count >= itemPerSlot)
                 {
                     return false;
                 }
@@ -79,10 +88,14 @@ public class NewMonoBehaviourScript : MonoBehaviour
 
             else
             {
-                inventory.Add(item.name, 1);
-                int itemIndex = inventory.Keys.ToList().IndexOf(item.name);
 
-                UpdateItemUI(item.sprite, itemIndex);
+                ItemEntry newEntry = new ItemEntry{ count = 1, sprite = item.sprite };
+
+                inventory.Add(item.name, newEntry);
+                int itemIndex = inventory.Keys.ToList().IndexOf(item.name);
+                UpdateItemCountUI(item, 1);
+
+                UpdateItemUI(item);
                 return true;
             }
         }
@@ -90,18 +103,19 @@ public class NewMonoBehaviourScript : MonoBehaviour
         return false;
     }
 
-    void UpdateItemUI(Sprite itemSprite, int itemIndex)
+    void UpdateItemUI(InventoryItem item)
     {
         foreach (Image image in itemImages)
         {
-            if (image.sprite == itemSprite)
+            if (image.sprite == item.sprite)
             {
+                UpdateItemCountUI(item, 1);
                 return;
             }
 
             if (image.sprite == null)
             {
-                image.sprite = itemSprite;
+                image.sprite = item.sprite;
                 Color color = image.color;
                 color.a = 1f;
 
@@ -109,5 +123,11 @@ public class NewMonoBehaviourScript : MonoBehaviour
                 return;
             }
         }
+    }
+
+    void UpdateItemCountUI(InventoryItem item, int count)
+    {
+        int itemIndex = inventory.Keys.ToList().IndexOf(item.name);
+        itemCountTexts[itemIndex].text = count.ToString();
     }
 }

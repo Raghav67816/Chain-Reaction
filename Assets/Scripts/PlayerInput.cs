@@ -121,6 +121,16 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""initialStateCheck"": false,
                     ""priority"": 0
+                },
+                {
+                    ""name"": ""Shoot"",
+                    ""type"": ""Button"",
+                    ""id"": ""a6279f4a-facc-4b41-862a-d325a83ff88b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false,
+                    ""priority"": 0
                 }
             ],
             ""bindings"": [
@@ -178,6 +188,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""Release"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""70be0b51-0070-4731-a439-1e5d1e014f18"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9901c962-ae16-4efe-866a-7b392a0cc7b3"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -189,6 +221,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Keyboard_Move = m_Keyboard.FindAction("Move", throwIfNotFound: true);
         m_Keyboard_Jump = m_Keyboard.FindAction("Jump", throwIfNotFound: true);
         m_Keyboard_Release = m_Keyboard.FindAction("Release", throwIfNotFound: true);
+        m_Keyboard_Shoot = m_Keyboard.FindAction("Shoot", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -272,6 +305,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Keyboard_Move;
     private readonly InputAction m_Keyboard_Jump;
     private readonly InputAction m_Keyboard_Release;
+    private readonly InputAction m_Keyboard_Shoot;
     /// <summary>
     /// Provides access to input actions defined in input action map "Keyboard".
     /// </summary>
@@ -295,6 +329,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Keyboard/Release".
         /// </summary>
         public InputAction @Release => m_Wrapper.m_Keyboard_Release;
+        /// <summary>
+        /// Provides access to the underlying input action "Keyboard/Shoot".
+        /// </summary>
+        public InputAction @Shoot => m_Wrapper.m_Keyboard_Shoot;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -330,6 +368,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Release.started += instance.OnRelease;
             @Release.performed += instance.OnRelease;
             @Release.canceled += instance.OnRelease;
+            @Shoot.started += instance.OnShoot;
+            @Shoot.performed += instance.OnShoot;
+            @Shoot.canceled += instance.OnShoot;
         }
 
         /// <summary>
@@ -350,6 +391,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Release.started -= instance.OnRelease;
             @Release.performed -= instance.OnRelease;
             @Release.canceled -= instance.OnRelease;
+            @Shoot.started -= instance.OnShoot;
+            @Shoot.performed -= instance.OnShoot;
+            @Shoot.canceled -= instance.OnShoot;
         }
 
         /// <summary>
@@ -411,5 +455,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRelease(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Shoot" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnShoot(InputAction.CallbackContext context);
     }
 }
