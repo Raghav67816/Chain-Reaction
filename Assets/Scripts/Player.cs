@@ -52,6 +52,7 @@ public class Player : MonoBehaviour
     [Header("UI Elements")]
     public Slider healthSlider;
     public Slider gasSlider;
+    public Image crosshair;
 
     private SpriteRenderer activeItemSprite;
 
@@ -59,7 +60,7 @@ public class Player : MonoBehaviour
     {
         playerControls = new PlayerControls();
 
-        
+
         activeItemSprite = holdPoint.GetComponent<SpriteRenderer>();
 
         InventoryManager.OnItemEquipped += OnItemEquipped;
@@ -247,7 +248,7 @@ public class Player : MonoBehaviour
         FoodItem foodItem = collision.GetComponent<FoodItem>();
         InventoryItemMono item = collision.GetComponent<InventoryItemMono>();
 
-        if(item != null)
+        if (item != null)
         {
             OnItemInteraction?.Invoke(item?.item, item?.gameObject);
         }
@@ -274,6 +275,37 @@ public class Player : MonoBehaviour
         activeItemSprite.sprite = itemImage;
     }
 
+    // TODO: Starting pos is not correct
+    void OnShoot(InputAction.CallbackContext ctx)
+    {
+        if (crosshair != null)
+        {
+            Vector3 screenPos = crosshair.transform.position;
+            screenPos.z = Mathf.Abs(Camera.main.transform.position.z);
+            Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPos);
+
+            Vector2 finalPos = new Vector2(worldPos.x, worldPos.y);
+            
+
+            if(activeItemSprite != null)
+            {
+                GameObject projectile = new GameObject("temp");
+                Projectile proj = projectile.AddComponent<Projectile>();
+
+                proj.Intialize(activeItemSprite);
+
+                projectile.transform.localScale = Vector3.one;
+
+                Vector2 vector = new Vector2(
+                    holdPoint.transform.position.x,
+                    holdPoint.transform.position.y
+                );
+
+                proj.Launch(finalPos - vector);
+            }
+        }
+    }
+
     void OnDisable()
     {
         playerControls.Keyboard.Move.performed -= MoveInputCancel;
@@ -282,6 +314,9 @@ public class Player : MonoBehaviour
         playerControls.Keyboard.Jump.performed -= Jump;
 
         playerControls.Keyboard.Release.performed -= ReleaseGas;
+
+        playerControls.Keyboard.Shoot.performed -= OnShoot;
+
         playerControls.Disable();
     }
 
@@ -293,6 +328,8 @@ public class Player : MonoBehaviour
         playerControls.Keyboard.Jump.performed += Jump;
 
         playerControls.Keyboard.Release.performed += ReleaseGas;
+
+        playerControls.Keyboard.Shoot.performed += OnShoot;
         playerControls.Enable();
     }
 

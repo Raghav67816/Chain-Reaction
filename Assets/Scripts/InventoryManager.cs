@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine.InputSystem;
-using System.Numerics;
 using System;
 
 public class ItemEntry
