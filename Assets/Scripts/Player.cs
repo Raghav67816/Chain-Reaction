@@ -290,6 +290,8 @@ public class Player : MonoBehaviour
             if(activeItemSprite != null)
             {
                 GameObject projectile = new GameObject("temp");
+                projectile.transform.position = holdPoint.transform.position;
+
                 Projectile proj = projectile.AddComponent<Projectile>();
 
                 proj.Intialize(activeItemSprite);
