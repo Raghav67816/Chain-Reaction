@@ -141,14 +141,48 @@ public class InventoryManager : MonoBehaviour
         float input = ctx.ReadValue<float>();
 
         Debug.Log(input);
-        if(input == -1 && inventory.Keys.Count > 0)
+        if(input == -1 && activeItem > 0)
         {
-            // activeItem--;
+            activeItem--;
+            SetItemActive();
         }
 
         if(input == 1 && activeItem < inventory.Keys.Count)
         {
-            // Debug.Log("Right pressed");
+            activeItem++;
+            SetItemActive();
+        }
+    }
+
+    /*
+    to set an item active i need,
+
+    index of that item in the inventory hotbar
+    - i go to that item
+    - get the image 
+    - get the outline 
+    - reset for everyone except the active one 
+    */
+
+    void SetItemActive()
+    {
+        for(int i = 0; i<itemImages.Length; i++)
+        {
+            if(itemImages[i] == null) continue;
+
+            Outline outline = itemImages[i].GetComponent<Outline>();
+            if(outline != null)
+            {
+                if(i == activeItem)
+                {
+                    outline.effectDistance = activeItemEffect;
+                }
+
+                else
+                {
+                    outline.effectDistance = UnityEngine.Vector2.zero;
+                }
+            }
         }
     }
 

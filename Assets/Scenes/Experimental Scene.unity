@@ -3690,7 +3690,7 @@ MonoBehaviour:
   activeItem: 0
   maxSlots: 4
   itemPerSlot: 5
-  activeItemEffect: {x: 0, y: 0}
+  activeItemEffect: {x: 3, y: 3}
   itemImages:
   - {fileID: 545721671}
   - {fileID: 1316018465}
