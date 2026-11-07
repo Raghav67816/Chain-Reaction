@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using UnityEngine.InputSystem;
+using System.Numerics;
 
 public class ItemEntry
 {
@@ -16,12 +18,17 @@ public class InventoryManager : MonoBehaviour
     public InventoryItem[] items;
 
     [Header("Settings")]
+    public int activeItem = 0;
     public int maxSlots = 4;
     public int itemPerSlot = 5;
+    public UnityEngine.Vector2 activeItemEffect;
 
     [Header("UI References")]
     public Image[] itemImages;
     public TextMeshProUGUI[] itemCountTexts;
+
+    [Header("Input")]
+    public InputAction switchAction;
 
     private Dictionary<string, ItemEntry> inventory = new Dictionary<string, ItemEntry>();
 
@@ -88,14 +95,12 @@ public class InventoryManager : MonoBehaviour
 
             else
             {
-
                 ItemEntry newEntry = new ItemEntry{ count = 1, sprite = item.sprite };
 
                 inventory.Add(item.name, newEntry);
-                int itemIndex = inventory.Keys.ToList().IndexOf(item.name);
                 UpdateItemCountUI(item, 1);
-
                 UpdateItemUI(item);
+
                 return true;
             }
         }
@@ -129,5 +134,36 @@ public class InventoryManager : MonoBehaviour
     {
         int itemIndex = inventory.Keys.ToList().IndexOf(item.name);
         itemCountTexts[itemIndex].text = count.ToString();
+    }
+
+    void SwitchItem(InputAction.CallbackContext ctx)
+    {
+        float input = ctx.ReadValue<float>();
+
+        Debug.Log(input);
+        if(input == -1 && inventory.Keys.Count > 0)
+        {
+            // activeItem--;
+        }
+
+        if(input == 1 && activeItem < inventory.Keys.Count)
+        {
+            // Debug.Log("Right pressed");
+        }
+    }
+
+
+    void OnEnable()
+    {
+        switchAction.performed += SwitchItem;
+
+        switchAction.Enable();
+    }
+
+    void OnDisable()
+    {
+        switchAction.canceled -= SwitchItem;
+
+        switchAction.Disable();
     }
 }

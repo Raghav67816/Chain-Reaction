@@ -265,6 +265,7 @@ public class Player : MonoBehaviour
     {
         playerControls.Keyboard.Move.performed -= MoveInputCancel;
         playerControls.Keyboard.Move.canceled -= MoveInputCancel;
+
         playerControls.Keyboard.Jump.performed -= Jump;
 
         playerControls.Keyboard.Release.performed -= ReleaseGas;

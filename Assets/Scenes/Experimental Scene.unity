@@ -936,7 +936,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 3, y: 3}
+  m_EffectDistance: {x: 0, y: 0}
   m_UseGraphicAlpha: 1
 --- !u!1 &611100217
 GameObject:
@@ -3687,14 +3687,50 @@ MonoBehaviour:
   items:
   - {fileID: 11400000, guid: b0772fccec578fc42972e1159920ee2e, type: 2}
   - {fileID: 11400000, guid: 1a90bca3e172e794f9ae742071293e9d, type: 2}
+  activeItem: 0
   maxSlots: 4
   itemPerSlot: 5
+  activeItemEffect: {x: 0, y: 0}
   itemImages:
   - {fileID: 545721671}
   - {fileID: 1316018465}
   itemCountTexts:
   - {fileID: 880490081}
   - {fileID: 433309437}
+  switchAction:
+    m_Name: Switch
+    m_Type: 0
+    m_ExpectedControlType: Vector2
+    m_Id: d447595a-cbf2-4cc6-995b-fcc34fcfe420
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 1D Axis
+      m_Id: add36bb0-4aae-4f56-892a-834cb2313f96
+      m_Path: 1DAxis
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Switch
+      m_Flags: 4
+    - m_Name: negative
+      m_Id: 17a3b9b9-58f4-4ef8-b7f8-859d247f4a52
+      m_Path: <Keyboard>/leftArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Switch
+      m_Flags: 8
+    - m_Name: positive
+      m_Id: ce0ce36a-08d9-44f3-ba1e-197734200d24
+      m_Path: <Keyboard>/rightArrow
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Switch
+      m_Flags: 8
+    m_Flags: 0
+    m_Priority: 0
 --- !u!1 &955027557
 GameObject:
   m_ObjectHideFlags: 0
@@ -4252,7 +4288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 3, y: 3}
+  m_EffectDistance: {x: 0, y: 0}
   m_UseGraphicAlpha: 1
 --- !u!114 &1316018465
 MonoBehaviour:
