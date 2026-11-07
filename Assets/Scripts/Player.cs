@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
     public float playerHealth = 100f;
     public Transform foot;
     public Transform back;
+    public Transform holdPoint;
 
     private bool isFacingRight = true;
 
@@ -52,9 +53,16 @@ public class Player : MonoBehaviour
     public Slider healthSlider;
     public Slider gasSlider;
 
+    private SpriteRenderer activeItemSprite;
+
     void Awake()
     {
         playerControls = new PlayerControls();
+
+        
+        activeItemSprite = holdPoint.GetComponent<SpriteRenderer>();
+
+        InventoryManager.OnItemEquipped += OnItemEquipped;
     }
 
     void Start()
@@ -259,6 +267,11 @@ public class Player : MonoBehaviour
 
             StartCoroutine(IncreaseSlider(gasSlider, playerBody.mass * 2 / 100));
         }
+    }
+
+    void OnItemEquipped(Sprite itemImage)
+    {
+        activeItemSprite.sprite = itemImage;
     }
 
     void OnDisable()

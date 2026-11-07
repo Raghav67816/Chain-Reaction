@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine.InputSystem;
 using System.Numerics;
+using System;
 
 public class ItemEntry
 {
@@ -14,6 +15,9 @@ public class ItemEntry
 
 public class InventoryManager : MonoBehaviour
 {
+
+    public static event Action<Sprite> OnItemEquipped;
+
     [Header("Items")]
     public InventoryItem[] items;
 
@@ -46,18 +50,6 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    /*
-    general flow
-
-    each unique items get a slot
-    if the item exists and count < maxItemPerSlot
-    accept the item and increase the counter
-
-    if the item exists and count >= maxItemPerSlot
-    reject the item
-
-    ALSO if the item does not exist, simply add it 
-    */
     bool AddItem(InventoryItem item)
     {
         if (inventory.Count >= maxSlots - 1)
@@ -145,24 +137,28 @@ public class InventoryManager : MonoBehaviour
         {
             activeItem--;
             SetItemActive();
+
+            ItemEntry item;
+            if(inventory.TryGetValue(inventory.Keys.ToList()[activeItem], out item))
+            {
+                Debug.Log(item.sprite.name);
+                OnItemEquipped.Invoke(item.sprite);
+            }
         }
 
         if(input == 1 && activeItem < inventory.Keys.Count)
         {
             activeItem++;
             SetItemActive();
+            
+            ItemEntry item;
+            if(inventory.TryGetValue(inventory.Keys.ToList()[activeItem], out item))
+            {
+                OnItemEquipped?.Invoke(item.sprite);
+            }
         }
     }
 
-    /*
-    to set an item active i need,
-
-    index of that item in the inventory hotbar
-    - i go to that item
-    - get the image 
-    - get the outline 
-    - reset for everyone except the active one 
-    */
 
     void SetItemActive()
     {
