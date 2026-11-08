@@ -264,7 +264,7 @@ public class Player : MonoBehaviour
                 moveSpeed -= retardValue;
             }
 
-            Instantiate(eatBurst, collision.transform.position, UnityEngine.Quaternion.identity);
+            Instantiate(eatBurst, collision.transform.position, Quaternion.identity);
             Destroy(collision.gameObject);
 
             StartCoroutine(IncreaseSlider(gasSlider, playerBody.mass * 2 / 100));
