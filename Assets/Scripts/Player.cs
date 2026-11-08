@@ -278,7 +278,7 @@ public class Player : MonoBehaviour
 
     void OnShoot(InputAction.CallbackContext ctx)
     {
-        if (crosshair != null)
+        if (crosshair != null && activeItemSprite.sprite != null)
         {
             Vector3 screenPos = crosshair.transform.position;
             screenPos.z = Mathf.Abs(Camera.main.transform.position.z);

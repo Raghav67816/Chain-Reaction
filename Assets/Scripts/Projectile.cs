@@ -3,7 +3,6 @@ using UnityEngine.Timeline;
 
 public class Projectile : MonoBehaviour
 {
-    private bool isReady = false;
     private GameObject projectile;
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D projectileBody;
@@ -13,7 +12,7 @@ public class Projectile : MonoBehaviour
     {
         spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         spriteRenderer.sprite = activeItemSprite.sprite;
-        spriteRenderer.sortingOrder = -9;
+        spriteRenderer.sortingOrder = 0;
 
         projectileBody = gameObject.AddComponent<Rigidbody2D>();
         projectileBody.bodyType = RigidbodyType2D.Dynamic;
