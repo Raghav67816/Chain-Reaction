@@ -16,6 +16,7 @@ public class InventoryManager : MonoBehaviour
 {
 
     public static event Action<Sprite> OnItemEquipped;
+    public static event Action<Sprite> OnItemExhausted;
 
     [Header("Items")]
     public InventoryItem[] items;
@@ -38,6 +39,7 @@ public class InventoryManager : MonoBehaviour
     void Awake()
     {
         Player.OnItemInteraction += OnPlayerInteraction;
+        Player.OnItemUsed += OnItemUsed;
     }
 
     void OnPlayerInteraction(InventoryItem item, GameObject gameObject)
@@ -74,7 +76,7 @@ public class InventoryManager : MonoBehaviour
                 if (itemEntry.count < itemPerSlot)
                 {
                     inventory[item.name].count++;
-                    UpdateItemCountUI(item, inventory[item.name].count);
+                    UpdateItemCountUI(item.name, inventory[item.name].count);
                     return true;
                 }
 
@@ -89,7 +91,7 @@ public class InventoryManager : MonoBehaviour
                 ItemEntry newEntry = new ItemEntry{ count = 1, sprite = item.sprite };
 
                 inventory.Add(item.name, newEntry);
-                UpdateItemCountUI(item, 1);
+                UpdateItemCountUI(item.name, 1);
                 UpdateItemUI(item);
 
                 return true;
@@ -105,7 +107,7 @@ public class InventoryManager : MonoBehaviour
         {
             if (image.sprite == item.sprite)
             {
-                UpdateItemCountUI(item, 1);
+                UpdateItemCountUI(item.name, 1);
                 return;
             }
 
@@ -121,10 +123,46 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    void UpdateItemCountUI(InventoryItem item, int count)
+    void UpdateItemCountUI(string itemName, int count)
     {
-        int itemIndex = inventory.Keys.ToList().IndexOf(item.name);
+        int itemIndex = inventory.Keys.ToList().IndexOf(itemName);
         itemCountTexts[itemIndex].text = count.ToString();
+    }
+
+    
+    void OnItemUsed(Sprite item)
+    {
+        string[] keys = inventory.Keys.ToArray();
+
+        for(int i=0; i<itemImages.Count(); i++)
+        {
+            if(itemImages[i].sprite == item)
+            {
+                ItemEntry entry;
+                if(inventory.TryGetValue(keys[i], out entry))
+                {
+                    entry.count--;
+                    UpdateItemCountUI(keys[i], entry.count);
+
+                    if(entry.count < 1)
+                    {
+                        OnItemExhausted.Invoke(itemImages[i].sprite);
+                        itemImages[i].sprite = null;
+
+                        Color c = itemImages[i].color;
+                        c.a = 0f;
+                        itemImages[i].color = c;
+
+                        Outline outline = itemImages[i].GetComponent<Outline>();
+                        outline.effectDistance = Vector2.zero;
+                        UpdateItemCountUI(keys[i], 0);
+
+                        inventory.Remove(keys[i]);
+
+                    }
+                }
+            }
+        }
     }
 
     void SwitchItem(InputAction.CallbackContext ctx)
@@ -175,7 +213,7 @@ public class InventoryManager : MonoBehaviour
 
                 else
                 {
-                    outline.effectDistance = UnityEngine.Vector2.zero;
+                    outline.effectDistance = Vector2.zero;
                 }
             }
         }

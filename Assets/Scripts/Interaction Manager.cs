@@ -3,8 +3,6 @@ using UnityEngine;
 public class InteractionManager : MonoBehaviour
 {
     public Transform interactionCheck;
-
-    // Reference to layers
     public LayerMask computerLayer;
 
     void Update()

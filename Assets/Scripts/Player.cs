@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
 
     // Events
     public static event Action<InventoryItem, GameObject> OnItemInteraction;
+    public static event Action<Sprite> OnItemUsed;
 
     [Header("Effects")]
     public ParticleSystem eatBurst;
@@ -60,10 +61,10 @@ public class Player : MonoBehaviour
     {
         playerControls = new PlayerControls();
 
-
         activeItemSprite = holdPoint.GetComponent<SpriteRenderer>();
 
         InventoryManager.OnItemEquipped += OnItemEquipped;
+        InventoryManager.OnItemExhausted += OnItemExhausted;
     }
 
     void Start()
@@ -275,7 +276,6 @@ public class Player : MonoBehaviour
         activeItemSprite.sprite = itemImage;
     }
 
-    // TODO: Starting pos is not correct
     void OnShoot(InputAction.CallbackContext ctx)
     {
         if (crosshair != null)
@@ -296,7 +296,7 @@ public class Player : MonoBehaviour
 
                 proj.Intialize(activeItemSprite);
 
-                projectile.transform.localScale = Vector3.one;
+                projectile.transform.localScale = new Vector3(2.5f, 2.5f, 0);
 
                 Vector2 vector = new Vector2(
                     holdPoint.transform.position.x,
@@ -304,7 +304,20 @@ public class Player : MonoBehaviour
                 );
 
                 proj.Launch(finalPos - vector);
+
+                OnItemUsed.Invoke(activeItemSprite.sprite);
             }
+        }
+    }
+
+    void OnItemExhausted(Sprite itemSprite)
+    {
+        if(activeItemSprite.sprite == itemSprite)
+        {
+            activeItemSprite.sprite = null;
+            Color color = activeItemSprite.color;
+            color.a = 0f;
+            activeItemSprite.color = color;
         }
     }
 

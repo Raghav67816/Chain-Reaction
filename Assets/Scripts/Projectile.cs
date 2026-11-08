@@ -7,13 +7,13 @@ public class Projectile : MonoBehaviour
     private GameObject projectile;
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D projectileBody;
-    private new CircleCollider2D collider;
+    private CircleCollider2D collider;
 
     public void Intialize(SpriteRenderer activeItemSprite)
     {
         spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         spriteRenderer.sprite = activeItemSprite.sprite;
-        spriteRenderer.sortingOrder = 2;
+        spriteRenderer.sortingOrder = -9;
 
         projectileBody = gameObject.AddComponent<Rigidbody2D>();
         projectileBody.bodyType = RigidbodyType2D.Dynamic;
@@ -27,11 +27,20 @@ public class Projectile : MonoBehaviour
     public void Launch(Vector2 direction)
     {
         projectileBody.linearVelocity = direction.normalized * 10f;
-
-        float angle = Mathf.Atan2(direction.y, direction.x);
-        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
         Destroy(gameObject, 5f);
+    }
+
+    public void FixedUpdate()
+    {
+        if(projectileBody.linearVelocity.sqrMagnitude > 0.1f)
+        {
+            float angle = Mathf.Atan2(
+                projectileBody.linearVelocity.y,
+                projectileBody.linearVelocity.x
+            ) * Mathf.Rad2Deg;
+
+            projectileBody.MoveRotation(angle);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision)
