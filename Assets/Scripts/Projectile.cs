@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Timeline;
 
@@ -7,6 +8,18 @@ public class Projectile : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D projectileBody;
     private CircleCollider2D collider;
+    private int targetLayer;
+
+    public static event Action<GameObject, GameObject, float> OnProjectileHit;
+
+    void Start()
+    {
+        targetLayer = LayerMask.NameToLayer("Enemy");
+        if(targetLayer != 8)
+        {
+            Debug.Log("layer not found");
+        }
+    }
 
     public void Intialize(SpriteRenderer activeItemSprite)
     {
@@ -26,7 +39,7 @@ public class Projectile : MonoBehaviour
     public void Launch(Vector2 direction)
     {
         projectileBody.linearVelocity = direction.normalized * 10f;
-        Destroy(gameObject, 5f);
+        // Destroy(gameObject, 5f);
     }
 
     public void FixedUpdate()
@@ -44,6 +57,9 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Destroy(transform.parent);
+        if(collision.gameObject.layer == targetLayer)
+        {
+            OnProjectileHit?.Invoke(collision.gameObject, gameObject, 20f);
+        }
     }
 }

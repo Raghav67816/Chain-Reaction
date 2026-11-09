@@ -1,6 +1,15 @@
 using System.Collections;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
+
+public enum DroneState
+{
+    IDLE,
+    WALK,
+    WALK_SCAN,
+    DEAD
+}
 
 public class Drone : MonoBehaviour
 {
@@ -16,12 +25,20 @@ public class Drone : MonoBehaviour
     public float alertSpeed = 10f;
     public float scanRadius = 5f;
 
+    [Header("Health")]
+    public float health;
+    public LineRenderer healthBar;
+    public float barWidth = 1.0f;
+    private float maxHealth = 100f;
+
     // angles
     private float currentAngle;
     private float targetAngle;
 
     void Start()
     {
+        Projectile.OnProjectileHit += TakeDamage;
+
         currentAngle = scanLight.transform.eulerAngles.z;
         targetAngle = currentAngle;
         StartCoroutine(GenerateRandomLookUpAngles());
@@ -30,7 +47,7 @@ public class Drone : MonoBehaviour
     void Update()
     {
         currentAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, 10f*50f*Time.deltaTime);
-        scanLight.transform.eulerAngles = new Vector3(0f, 0f, currentAngle);
+        scanLight.transform.eulerAngles = new UnityEngine.Vector3(0f, 0f, currentAngle);
 
         angle = currentAngle;
     }
@@ -48,5 +65,26 @@ public class Drone : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(scanLight.transform.position, scanRadius);
+    }
+
+    void TakeDamage(GameObject obj, GameObject hitObject, float damage)
+    {
+        if(obj == transform.gameObject)
+        {    
+            health -= damage;
+            UpdateHealthBar();
+
+            Destroy(hitObject);
+        }
+    }
+
+    void UpdateHealthBar()
+    {
+        float percent = health / maxHealth;
+        float leftPointX = -(barWidth / 2f);
+        float rightPointX = leftPointX + (barWidth * percent);
+
+        healthBar.SetPosition(0, new UnityEngine.Vector3(leftPointX, 0f, 0f));
+        healthBar.SetPosition(1, new UnityEngine.Vector3(rightPointX, 0f, 0f));
     }
 }
