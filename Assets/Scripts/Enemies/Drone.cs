@@ -1,7 +1,6 @@
-using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 using UnityEngine.Rendering.Universal;
 
 public enum DroneState
@@ -16,6 +15,8 @@ public class Drone : MonoBehaviour
 {
     [Header("General References")]
     public Transform droneTransform;
+    public Animator droneAnimator;
+
     [Header("Lighting")]
     public Light2D scanLight;
     [Range(0f, 360f)] public float angle;
@@ -30,6 +31,8 @@ public class Drone : MonoBehaviour
     public float health = 100f;
     public float maxHealth = 100f;
     public Image healthBar;
+
+    public GameObject blastEffect;
 
     // angles
     private float currentAngle;
@@ -57,7 +60,7 @@ public class Drone : MonoBehaviour
         healthBar.fillAmount = Mathf.Lerp(
             healthBar.fillAmount,
             health / maxHealth,
-            .5f * Time.deltaTime
+            2f * Time.deltaTime
         );
     }
 
@@ -79,9 +82,28 @@ public class Drone : MonoBehaviour
     void TakeDamage(GameObject obj, GameObject hitObject, float damage)
     {
         float newHealth = health - damage;
-        if(newHealth < 0f)
+        if (newHealth <= 0f)
         {
-            Destroy(gameObject);
+            StartCoroutine(FlickerScanLight());
+            droneAnimator.SetBool("isDead", true);
+            // Destroy(gameObject);
+        }
+        health -= damage;
+
+        Destroy(hitObject);
+    }
+
+    IEnumerator FlickerScanLight()
+    {
+        int r = Random.Range(3, 7);
+        float tempIntensity = scanLight.intensity;
+        for (int i = 0; i < r; i++)
+        {
+            float waitTime = Random.Range(0.1f, 1f);
+            scanLight.intensity = 0;
+
+            yield return new WaitForSeconds(waitTime);
+            scanLight.intensity = tempIntensity;
         }
     }
 }
