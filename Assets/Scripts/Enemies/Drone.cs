@@ -22,14 +22,17 @@ public class Drone : MonoBehaviour
     void Update()
     {
         currentAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, 10f*50f*Time.deltaTime);
-        scanLight.transform.eulerAngles = new Vector3(0f, 0f, angle);
+        scanLight.transform.eulerAngles = new Vector3(0f, 0f, currentAngle);
+
+        angle = currentAngle;
     }
 
     IEnumerator GenerateRandomLookUpAngles()
     {
-        float newAngle = Random.Range(-360f, 360f);
-        angle = Mathf.Lerp(angle, newAngle, 2f*Time.deltaTime);
-
-        yield return new WaitForSeconds(5f);
+        while (true)
+        {
+            targetAngle = Random.Range(-360f, 360f);
+            yield return new WaitForSeconds(2f);
+        }
     }
 }
