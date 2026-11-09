@@ -4,9 +4,17 @@ using UnityEngine.Rendering.Universal;
 
 public class Drone : MonoBehaviour
 {
+    [Header("General References")]
+    public Transform droneTransform;
     [Header("Lighting")]
     public Light2D scanLight;
     [Range(0f, 360f)] public float angle;
+
+
+    [Header("Movement")]
+    public float normalSpeed = 5f;
+    public float alertSpeed = 10f;
+    public float scanRadius = 5f;
 
     // angles
     private float currentAngle;
@@ -34,5 +42,11 @@ public class Drone : MonoBehaviour
             targetAngle = Random.Range(-360f, 360f);
             yield return new WaitForSeconds(2f);
         }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(scanLight.transform.position, scanRadius);
     }
 }
