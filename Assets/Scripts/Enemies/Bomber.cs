@@ -63,7 +63,7 @@ public class Bomber : MonoBehaviour
         {
             bomb.SetActive(true);
         }
-        bombAnimator.Play("Drop");
+        if(bombAnimator != null) bombAnimator.Play("Drop");
     }
 
     void OnDrawGizmosSelected()

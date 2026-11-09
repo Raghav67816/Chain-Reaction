@@ -13,7 +13,7 @@ public class Bomb : MonoBehaviour
     private AudioClip hitSound;
     private CinemachineImpulseSource impulseSource;
 
-    public static event Action<int> OnBombDropped;
+    public static event Action<Vector2> OnBombDropped;
 
     void Start()
     {
@@ -45,6 +45,7 @@ public class Bomb : MonoBehaviour
 
                 AudioSource.PlayClipAtPoint(hitSound, Camera.main.transform.position);
                 impulseSource.GenerateImpulseWithForce(4f);
+                OnBombDropped?.Invoke(gameObject.transform.position);
                 Destroy(transform.gameObject);
                 Destroy(hit, .5f);
             }

@@ -65,6 +65,8 @@ public class Player : MonoBehaviour
 
         InventoryManager.OnItemEquipped += OnItemEquipped;
         InventoryManager.OnItemExhausted += OnItemExhausted;
+
+        Bomb.OnBombDropped += OnBombDropped;
     }
 
     void Start()
@@ -318,6 +320,15 @@ public class Player : MonoBehaviour
             Color color = activeItemSprite.color;
             color.a = 0f;
             activeItemSprite.color = color;
+        }
+    }
+
+    void OnBombDropped(Vector2 pos)
+    {
+        Vector2 diff = (Vector2)transform.position - pos;
+        if(diff.magnitude < 4f)
+        {
+            StartCoroutine(DecreaseSlider(healthSlider, playerHealth - 8f));
         }
     }
 
