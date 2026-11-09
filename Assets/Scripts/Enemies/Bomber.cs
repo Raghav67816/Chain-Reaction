@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class Bomber : MonoBehaviour
@@ -15,23 +16,27 @@ public class Bomber : MonoBehaviour
     public GameObject bomb;
     public Transform dropPoint;
 
+    [Header("Sound effects")]
+    public AudioClip blastSoundEffect;
+
     [Header("Animation")]
     public Animator bomberAnimator;
     public Animator bombAnimator;
+    public CinemachineImpulseSource impulseSource;
 
     [Header("Layers")]
     public LayerMask groundLayer;
 
-
     private Bomb bombScript;
     private bool isPlayerNear = false;
+    public GameObject hitEffect;
 
     void Start()
     {
         bomberAnimator.enabled = false;
         bombScript = bomb.AddComponent<Bomb>();
 
-        bombScript.InitBomb(4f, 8f, groundLayer);
+        bombScript.InitBomb(4f, 8f, groundLayer, hitEffect, blastSoundEffect);
     }
 
     void Update()
@@ -54,7 +59,10 @@ public class Bomber : MonoBehaviour
 
     void DropBomb()
     {
-        bomb.SetActive(true);
+        if(bomb != null)
+        {
+            bomb.SetActive(true);
+        }
         bombAnimator.Play("Drop");
     }
 
