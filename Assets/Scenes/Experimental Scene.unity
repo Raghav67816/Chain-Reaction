@@ -288,7 +288,7 @@ MonoBehaviour:
   normalSpeed: 5
   alertSpeed: 10
   scanRadius: 5
-  health: 0
+  health: 100
   healthBar: {fileID: 135400717}
   barWidth: 1
 --- !u!58 &105937988

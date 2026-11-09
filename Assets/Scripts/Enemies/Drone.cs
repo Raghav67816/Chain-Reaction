@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Numerics;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -47,7 +46,7 @@ public class Drone : MonoBehaviour
     void Update()
     {
         currentAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, 10f*50f*Time.deltaTime);
-        scanLight.transform.eulerAngles = new UnityEngine.Vector3(0f, 0f, currentAngle);
+        scanLight.transform.eulerAngles = new Vector3(0f, 0f, currentAngle);
 
         angle = currentAngle;
     }
@@ -74,17 +73,16 @@ public class Drone : MonoBehaviour
             health -= damage;
             UpdateHealthBar();
 
-            Destroy(hitObject);
+            // Destroy(hitObject);
         }
     }
 
     void UpdateHealthBar()
     {
-        float percent = health / maxHealth;
-        float leftPointX = -(barWidth / 2f);
-        float rightPointX = leftPointX + (barWidth * percent);
+        float healthPercent = health / maxHealth;
+        float newRightX = healthPercent * barWidth;
 
-        healthBar.SetPosition(0, new UnityEngine.Vector3(leftPointX, 0f, 0f));
-        healthBar.SetPosition(1, new UnityEngine.Vector3(rightPointX, 0f, 0f));
+        healthBar.SetPosition(0, new Vector3(0f, 0f, 0f));
+        healthBar.SetPosition(1, new Vector3(newRightX, 0f, 0f));
     }
 }
