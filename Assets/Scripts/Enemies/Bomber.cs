@@ -19,13 +19,19 @@ public class Bomber : MonoBehaviour
     public Animator bomberAnimator;
     public Animator bombAnimator;
 
+    [Header("Layers")]
+    public LayerMask groundLayer;
 
-    private bool isLaunched = false;
+
+    private Bomb bombScript;
     private bool isPlayerNear = false;
 
     void Start()
     {
         bomberAnimator.enabled = false;
+        bombScript = bomb.AddComponent<Bomb>();
+
+        bombScript.InitBomb(4f, 8f, groundLayer);
     }
 
     void Update()
@@ -48,9 +54,8 @@ public class Bomber : MonoBehaviour
 
     void DropBomb()
     {
-        isLaunched = true;
         bomb.SetActive(true);
-        bombAnimator.Play("Bomb Drop");
+        bombAnimator.Play("Drop");
     }
 
     void OnDrawGizmosSelected()
