@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Rendering.Universal;
 
 public enum DroneState
@@ -25,10 +27,9 @@ public class Drone : MonoBehaviour
     public float scanRadius = 5f;
 
     [Header("Health")]
-    public float health;
-    public LineRenderer healthBar;
-    public float barWidth = 1.0f;
-    private float maxHealth = 100f;
+    public float health = 100f;
+    public float maxHealth = 100f;
+    public Image healthBar;
 
     // angles
     private float currentAngle;
@@ -45,17 +46,26 @@ public class Drone : MonoBehaviour
 
     void Update()
     {
-        currentAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, 10f*50f*Time.deltaTime);
+        currentAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, 10f * 50f * Time.deltaTime);
         scanLight.transform.eulerAngles = new Vector3(0f, 0f, currentAngle);
 
         angle = currentAngle;
+    }
+
+    void FixedUpdate()
+    {
+        healthBar.fillAmount = Mathf.Lerp(
+            healthBar.fillAmount,
+            health / maxHealth,
+            .5f * Time.deltaTime
+        );
     }
 
     IEnumerator GenerateRandomLookUpAngles()
     {
         while (true)
         {
-            targetAngle = Random.Range(-360f, 360f);
+            targetAngle = UnityEngine.Random.Range(-360f, 360f);
             yield return new WaitForSeconds(2f);
         }
     }
@@ -68,21 +78,10 @@ public class Drone : MonoBehaviour
 
     void TakeDamage(GameObject obj, GameObject hitObject, float damage)
     {
-        if(obj == transform.gameObject)
-        {    
-            health -= damage;
-            UpdateHealthBar();
-
-            // Destroy(hitObject);
+        float newHealth = health - damage;
+        if(newHealth < 0f)
+        {
+            Destroy(gameObject);
         }
-    }
-
-    void UpdateHealthBar()
-    {
-        float healthPercent = health / maxHealth;
-        float newRightX = healthPercent * barWidth;
-
-        healthBar.SetPosition(0, new Vector3(0f, 0f, 0f));
-        healthBar.SetPosition(1, new Vector3(newRightX, 0f, 0f));
     }
 }
