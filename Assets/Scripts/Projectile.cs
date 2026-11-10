@@ -59,7 +59,8 @@ public class Projectile : MonoBehaviour
     {
         if(collision.gameObject.layer == targetLayer)
         {
-            OnProjectileHit?.Invoke(collision.gameObject, gameObject, 20f);
+            Debug.Log($"Hit: {collision.name}");
+            OnProjectileHit.Invoke(collision.gameObject, gameObject, 20f);
         }
     }
 }

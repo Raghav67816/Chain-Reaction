@@ -35,9 +35,15 @@ public class Drone : MonoBehaviour
 
     public GameObject blastEffect;
 
+    [Header("Sounds")]
+    public AudioClip droneHit;
+    public AudioClip droneShoot;
+    public AudioClip droneSpark;
+
     // angles
     private float currentAngle;
     private float targetAngle;
+    private GameObject effect;
 
     void Start()
     {
@@ -48,9 +54,6 @@ public class Drone : MonoBehaviour
         StartCoroutine(GenerateRandomLookUpAngles());
 
         intensity = scanLight.intensity;
-
-        SpriteRenderer blastRenderer = blastEffect.GetComponent<SpriteRenderer>();
-        blastRenderer.sortingOrder = 1;
     }
 
     void Update()
@@ -93,14 +96,15 @@ public class Drone : MonoBehaviour
 
     void TakeDamage(GameObject obj, GameObject hitObject, float damage)
     {
-        float newHealth = health - damage;
-        if (newHealth <= 0f)
+        health -= damage;
+
+        if(health <= 0f)
         {
             StartCoroutine(DrainScanLight());
             droneAnimator.SetBool("isDead", true);
         }
-        health -= damage;
 
+        AudioSource.PlayClipAtPoint(droneHit, Camera.main.transform.position);
         Destroy(hitObject);
     }
 
@@ -111,14 +115,33 @@ public class Drone : MonoBehaviour
         while (scanLight.intensity > 0f)
         {
             intensity -= randomSub;
+            AudioSource.PlayClipAtPoint(droneSpark, Camera.main.transform.position);
             yield return new WaitForSeconds(randomSub/100f);
 
             if(scanLight.intensity <= 0f){
                 scanLight.intensity = 0;
-                GameObject effect = Instantiate(blastEffect, transform.position, Quaternion.identity);
-                Destroy(gameObject, 1f);
-                Destroy(effect, 1f);
             }
         }
     }
+
+    void SpawnBlastEffect()
+    {
+        effect = Instantiate(blastEffect, transform.position, Quaternion.identity);
+        SpriteRenderer blastRenderer = blastEffect.GetComponent<SpriteRenderer>();
+        if(blastRenderer != null)
+        {
+            blastRenderer.sortingOrder = 1;
+        }
+    }
+
+    void DestroyBlastEffect()
+    {
+        Destroy(effect);
+        Destroy(gameObject);
+    }
+
+    // void OnDestroy()
+    // {
+    //     Projectile.OnProjectileHit -= TakeDamage;
+    // }
 }

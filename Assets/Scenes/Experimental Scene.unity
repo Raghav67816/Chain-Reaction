@@ -182,7 +182,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 211d3f1feb80210458dbf3b41de42372, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 105937983}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90643e4d90c3a8c43ae10f6b39e8e4b6, type: 3}
   m_Name: 
@@ -293,6 +293,9 @@ MonoBehaviour:
   maxHealth: 100
   healthBar: {fileID: 675356051}
   blastEffect: {fileID: 6438660845412631046, guid: 715def3635e948d469333f00199b457e, type: 3}
+  droneHit: {fileID: 8300000, guid: 0966795a9c001c345a43a54ba4caba6d, type: 3}
+  droneShoot: {fileID: 8300000, guid: f5cfdcb8930f8e347b8dbf40abe148e5, type: 3}
+  droneSpark: {fileID: 8300000, guid: 634b6e4a1cb3ff948a2f27419abcfff5, type: 3}
 --- !u!58 &105937988
 CircleCollider2D:
   m_ObjectHideFlags: 0
