@@ -20,6 +20,7 @@ public class Drone : MonoBehaviour
     [Header("Lighting")]
     public Light2D scanLight;
     [Range(0f, 360f)] public float angle;
+    private float intensity;
 
 
     [Header("Movement")]
@@ -45,6 +46,11 @@ public class Drone : MonoBehaviour
         currentAngle = scanLight.transform.eulerAngles.z;
         targetAngle = currentAngle;
         StartCoroutine(GenerateRandomLookUpAngles());
+
+        intensity = scanLight.intensity;
+
+        SpriteRenderer blastRenderer = blastEffect.GetComponent<SpriteRenderer>();
+        blastRenderer.sortingOrder = 1;
     }
 
     void Update()
@@ -62,13 +68,19 @@ public class Drone : MonoBehaviour
             health / maxHealth,
             2f * Time.deltaTime
         );
+
+        scanLight.intensity = Mathf.Lerp(
+            scanLight.intensity,
+            intensity,
+            2f * Time.deltaTime
+        );
     }
 
     IEnumerator GenerateRandomLookUpAngles()
     {
         while (true)
         {
-            targetAngle = UnityEngine.Random.Range(-360f, 360f);
+            targetAngle = Random.Range(-360f, 360f);
             yield return new WaitForSeconds(2f);
         }
     }
@@ -84,26 +96,29 @@ public class Drone : MonoBehaviour
         float newHealth = health - damage;
         if (newHealth <= 0f)
         {
-            StartCoroutine(FlickerScanLight());
+            StartCoroutine(DrainScanLight());
             droneAnimator.SetBool("isDead", true);
-            // Destroy(gameObject);
         }
         health -= damage;
 
         Destroy(hitObject);
     }
 
-    IEnumerator FlickerScanLight()
+    IEnumerator DrainScanLight()
     {
-        int r = Random.Range(3, 7);
-        float tempIntensity = scanLight.intensity;
-        for (int i = 0; i < r; i++)
+        float randomSub = Random.Range(0f, 10f);
+        int n = Random.Range(2, 5);
+        while (scanLight.intensity > 0f)
         {
-            float waitTime = Random.Range(0.1f, 1f);
-            scanLight.intensity = 0;
+            intensity -= randomSub;
+            yield return new WaitForSeconds(randomSub/100f);
 
-            yield return new WaitForSeconds(waitTime);
-            scanLight.intensity = tempIntensity;
+            if(scanLight.intensity <= 0f){
+                scanLight.intensity = 0;
+                GameObject effect = Instantiate(blastEffect, transform.position, Quaternion.identity);
+                Destroy(gameObject, 1f);
+                Destroy(effect, 1f);
+            }
         }
     }
 }
