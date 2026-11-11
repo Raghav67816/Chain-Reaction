@@ -51,6 +51,7 @@ public class Drone : MonoBehaviour
 
         currentAngle = scanLight.transform.eulerAngles.z;
         targetAngle = currentAngle;
+
         StartCoroutine(GenerateRandomLookUpAngles());
 
         intensity = scanLight.intensity;

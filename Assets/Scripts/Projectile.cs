@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.Timeline;
 
 public class Projectile : MonoBehaviour
 {
@@ -59,7 +58,6 @@ public class Projectile : MonoBehaviour
     {
         if(collision.gameObject.layer == targetLayer)
         {
-            Debug.Log($"Hit: {collision.name}");
             OnProjectileHit.Invoke(collision.gameObject, gameObject, 20f);
         }
     }
