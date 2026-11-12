@@ -80,6 +80,8 @@ public class Player : MonoBehaviour
 
         playerAudio = GetComponent<AudioSource>();
 
+        InputSystem.EnableDevice(Mouse.current);
+
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -92,6 +94,8 @@ public class Player : MonoBehaviour
                 playerBody.linearVelocity.y
             );
         }
+
+        Debug.Log($"Mouse enabled: {Mouse.current.enabled}");
     }
 
     void Update()
@@ -332,11 +336,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    void OnSwitchItem(InputAction.CallbackContext ctx)
-    {
-        float input = ctx.ReadValue<float>();
-        Debug.Log(input);
-    }
 
     void OnDisable()
     {
@@ -348,8 +347,6 @@ public class Player : MonoBehaviour
         playerControls.Keyboard.Release.performed -= ReleaseGas;
 
         playerControls.Keyboard.Shoot.performed -= OnShoot;
-
-        playerControls.Keyboard.SwitchItem.performed -= OnSwitchItem;
 
         playerControls.Disable();
     }
@@ -365,7 +362,6 @@ public class Player : MonoBehaviour
 
         playerControls.Keyboard.Shoot.performed += OnShoot;
 
-        playerControls.Keyboard.SwitchItem.performed += OnSwitchItem;
         playerControls.Enable();
     }
 

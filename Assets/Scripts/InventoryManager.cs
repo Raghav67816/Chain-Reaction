@@ -167,34 +167,31 @@ public class InventoryManager : MonoBehaviour
 
     void SwitchItem(InputAction.CallbackContext ctx)
     {
-        // if(Mouse.current != null)
-        // {
-        //     Debug.Log(Mouse.current.scroll.ReadValue());
-        // }
-        // if(input == -1 && activeItem > 0)
-        // {
-        //     activeItem--;
-        //     SetItemActive();
+        float input = ctx.ReadValue<float>();
+        if(input == -1 && activeItem > 0)
+        {
+            activeItem--;
+            SetItemActive();
 
-        //     ItemEntry item;
-        //     if(inventory.TryGetValue(inventory.Keys.ToList()[activeItem], out item))
-        //     {
-        //         Debug.Log(item.sprite.name);
-        //         OnItemEquipped.Invoke(item.sprite);
-        //     }
-        // }
+            ItemEntry item;
+            if(inventory.TryGetValue(inventory.Keys.ToList()[activeItem], out item))
+            {
+                Debug.Log(item.sprite.name);
+                OnItemEquipped.Invoke(item.sprite);
+            }
+        }
 
-        // if(input == 1 && activeItem < inventory.Keys.Count)
-        // {
-        //     activeItem++;
-        //     SetItemActive();
+        if(input == 1 && activeItem < inventory.Keys.Count - 1)
+        {
+            activeItem++;
+            SetItemActive();
             
-        //     ItemEntry item;
-        //     if(inventory.TryGetValue(inventory.Keys.ToList()[activeItem], out item))
-        //     {
-        //         OnItemEquipped?.Invoke(item.sprite);
-        //     }
-        // }
+            ItemEntry item;
+            if(inventory.TryGetValue(inventory.Keys.ToList()[activeItem], out item))
+            {
+                OnItemEquipped?.Invoke(item.sprite);
+            }
+        }
     }
 
 
