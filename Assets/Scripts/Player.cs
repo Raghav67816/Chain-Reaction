@@ -94,8 +94,6 @@ public class Player : MonoBehaviour
                 playerBody.linearVelocity.y
             );
         }
-
-        Debug.Log($"Mouse enabled: {Mouse.current.enabled}");
     }
 
     void Update()

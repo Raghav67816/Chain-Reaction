@@ -44,7 +44,6 @@ public class InventoryManager : MonoBehaviour
 
     void OnPlayerInteraction(InventoryItem item, GameObject gameObject)
     {
-        Debug.Log("inventory manager got it");
         if (AddItem(item))
         {
             Destroy(gameObject);
@@ -63,7 +62,6 @@ public class InventoryManager : MonoBehaviour
 
             if (totalItems >= maxSlots * itemPerSlot)
             {
-                Debug.Log("Inventory is full");
                 return false;
             }
         }
