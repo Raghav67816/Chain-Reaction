@@ -1,57 +1,31 @@
-using System;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 
 public class MainMenu: MonoBehaviour
 {
-    [Header("UI Document")]
-    public UIDocument uIDocument;
-    
-    // Buttons
-    private Button playBtn;
-    private Button settingsBtn;
-    private Button exitBtn;
+    [Header("Buttons")]
+    public Button playBtn;
+    public Button settingsBtn;
+    public Button exitBtn;
 
-    private bool btnsFound = false;
+    [Header("Audio Clips")]
+    public AudioClip clickSound;
+    public AudioClip hoverSound;
 
     void Start()
     {
-        if(uIDocument != null)
-        {
-            Debug.Log("Document found");
-            VisualElement root = uIDocument.rootVisualElement;
-
-            playBtn = root.Q<Button>("StartButton");
-            settingsBtn = root.Q<Button>("SettingsButton");
-            exitBtn = root.Q<Button>("ExitButton");
-
-            if(playBtn != null && settingsBtn != null && exitBtn != null)
-            {
-                btnsFound = true;
-                playBtn.RegisterCallback<ClickEvent>(OnPlayClicked);
-                exitBtn.RegisterCallback<ClickEvent>(OnExitClicked);
-            }
-        }
     }
 
-    void OnPlayClicked(ClickEvent evnt)
+    public void OnPlayClicked()
     {
-        BeepSound.Instance.PlayAudio();
+        AudioSource.PlayClipAtPoint(clickSound, Camera.main.transform.position);
         SceneManager.LoadScene(1);
     }
 
-    void OnExitClicked(ClickEvent evnt)
+    public void OnExitClicked()
     {
+        AudioSource.PlayClipAtPoint(clickSound, Camera.main.transform.position);
         Application.Quit();
-    }
-
-    void OnDisable()
-    {
-        if (btnsFound)
-        {
-            playBtn.UnregisterCallback<ClickEvent>(OnPlayClicked);
-            exitBtn.UnregisterCallback<ClickEvent>(OnExitClicked);
-        }
     }
 }
