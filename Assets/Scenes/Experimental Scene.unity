@@ -164,6 +164,7 @@ GameObject:
   - component: {fileID: 105937987}
   - component: {fileID: 105937988}
   - component: {fileID: 105937989}
+  - component: {fileID: 105937990}
   m_Layer: 8
   m_Name: Drone
   m_TagString: Untagged
@@ -346,6 +347,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FoodHoverAnimation
   hoverSpeed: 2
   hoverHeight: 0.2
+--- !u!114 &105937990
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105937983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseSource
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 4
+    CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    ImpulseDuration: 0.2
+    ImpulseType: 1
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 2, y: -2, z: 0}
 --- !u!1 &180425777
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,6 +412,7 @@ GameObject:
   - component: {fileID: 180425778}
   - component: {fileID: 180425780}
   - component: {fileID: 180425781}
+  - component: {fileID: 180425782}
   m_Layer: 0
   m_Name: Item
   m_TagString: Untagged
@@ -499,6 +554,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InventoryItemMono
   item: {fileID: 11400000, guid: b0772fccec578fc42972e1159920ee2e, type: 2}
+--- !u!114 &180425782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 180425777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65c844c725d34745ab123735bbd2bf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FoodHoverAnimation
+  hoverSpeed: 2
+  hoverHeight: 0.2
 --- !u!1 &227857448
 GameObject:
   m_ObjectHideFlags: 0
@@ -4108,6 +4177,7 @@ GameObject:
   - component: {fileID: 679672396}
   - component: {fileID: 679672395}
   - component: {fileID: 679672394}
+  - component: {fileID: 679672398}
   m_Layer: 0
   m_Name: Item (4)
   m_TagString: Untagged
@@ -4249,6 +4319,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &679672398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 679672393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65c844c725d34745ab123735bbd2bf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FoodHoverAnimation
+  hoverSpeed: 2
+  hoverHeight: 0.2
 --- !u!1 &702967091
 GameObject:
   m_ObjectHideFlags: 0
@@ -4884,36 +4968,20 @@ MonoBehaviour:
   - {fileID: 624874337}
   switchAction:
     m_Name: Switch
-    m_Type: 0
-    m_ExpectedControlType: Vector2
+    m_Type: 2
+    m_ExpectedControlType: Axis
     m_Id: d447595a-cbf2-4cc6-995b-fcc34fcfe420
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings:
-    - m_Name: 1D Axis
-      m_Id: add36bb0-4aae-4f56-892a-834cb2313f96
-      m_Path: 1DAxis
+    - m_Name: 
+      m_Id: 548d55b5-940d-4442-8e8c-2c9daf04e2a4
+      m_Path: <Mouse>/scroll/y
       m_Interactions: 
       m_Processors: 
       m_Groups: 
       m_Action: Switch
-      m_Flags: 4
-    - m_Name: negative
-      m_Id: 17a3b9b9-58f4-4ef8-b7f8-859d247f4a52
-      m_Path: <Keyboard>/leftArrow
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Switch
-      m_Flags: 8
-    - m_Name: positive
-      m_Id: ce0ce36a-08d9-44f3-ba1e-197734200d24
-      m_Path: <Keyboard>/rightArrow
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Switch
-      m_Flags: 8
+      m_Flags: 0
     m_Flags: 0
     m_Priority: 0
 --- !u!1 &955027557
@@ -5020,6 +5088,7 @@ GameObject:
   - component: {fileID: 980254993}
   - component: {fileID: 980254992}
   - component: {fileID: 980254991}
+  - component: {fileID: 980254995}
   m_Layer: 0
   m_Name: Item (2)
   m_TagString: Untagged
@@ -5161,6 +5230,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &980254995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 980254990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65c844c725d34745ab123735bbd2bf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FoodHoverAnimation
+  hoverSpeed: 2
+  hoverHeight: 0.2
 --- !u!1 &1049419518
 GameObject:
   m_ObjectHideFlags: 0
@@ -5878,6 +5961,7 @@ GameObject:
   - component: {fileID: 1612916007}
   - component: {fileID: 1612916006}
   - component: {fileID: 1612916005}
+  - component: {fileID: 1612916009}
   m_Layer: 0
   m_Name: Item (3)
   m_TagString: Untagged
@@ -6019,6 +6103,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1612916009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1612916004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65c844c725d34745ab123735bbd2bf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FoodHoverAnimation
+  hoverSpeed: 2
+  hoverHeight: 0.2
 --- !u!1 &1630559114
 GameObject:
   m_ObjectHideFlags: 0
@@ -9228,6 +9326,7 @@ GameObject:
   - component: {fileID: 2041354390}
   - component: {fileID: 2041354389}
   - component: {fileID: 2041354388}
+  - component: {fileID: 2041354392}
   m_Layer: 0
   m_Name: Item (1)
   m_TagString: Untagged
@@ -9369,6 +9468,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2041354392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2041354387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d65c844c725d34745ab123735bbd2bf3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FoodHoverAnimation
+  hoverSpeed: 2
+  hoverHeight: 0.2
 --- !u!1 &2074673855
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Rendering.Universal;
+using Unity.Cinemachine;
 
 public enum DroneState
 {
@@ -141,8 +142,8 @@ public class Drone : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // void OnDestroy()
-    // {
-    //     Projectile.OnProjectileHit -= TakeDamage;
-    // }
+    void OnDestroy()
+    {
+        Projectile.OnProjectileHit -= TakeDamage;
+    }
 }

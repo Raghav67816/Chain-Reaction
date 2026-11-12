@@ -126,7 +126,7 @@ public class Player : MonoBehaviour
     void Flip()
     {
         isFacingRight = !isFacingRight;
-        UnityEngine.Vector3 localScale = transform.localScale;
+        Vector3 localScale = transform.localScale;
         localScale.x *= -1f;
         transform.localScale = localScale;
     }
@@ -171,13 +171,13 @@ public class Player : MonoBehaviour
     {
         if (isOnGround)
         {
-            playerBody.linearVelocity = new UnityEngine.Vector2(
+            playerBody.linearVelocity = new Vector2(
                 playerBody.linearVelocity.x, jumpHeight
             );
         }
     }
 
-    System.Collections.IEnumerator GasDash(UnityEngine.Vector2 direction, float thrust)
+    System.Collections.IEnumerator GasDash(Vector2 direction, float thrust)
     {
         isDashing = true;
         playerBody.AddForce(
@@ -216,7 +216,7 @@ public class Player : MonoBehaviour
                 ForceMode2D.Impulse
             );
 
-            Instantiate(dashEffect, back.transform.position, UnityEngine.Quaternion.identity);
+            Instantiate(dashEffect, back.transform.position, Quaternion.identity);
 
             impulseSource.GenerateImpulseWithForce(1f);
 
@@ -228,7 +228,7 @@ public class Player : MonoBehaviour
 
     void PlayLandingEffect()
     {
-        Instantiate(landEffect, foot.position, UnityEngine.Quaternion.identity);
+        Instantiate(landEffect, foot.position, Quaternion.identity);
     }
 
     private void SetMoveInput(float value)
@@ -332,6 +332,12 @@ public class Player : MonoBehaviour
         }
     }
 
+    void OnSwitchItem(InputAction.CallbackContext ctx)
+    {
+        float input = ctx.ReadValue<float>();
+        Debug.Log(input);
+    }
+
     void OnDisable()
     {
         playerControls.Keyboard.Move.performed -= MoveInputCancel;
@@ -342,6 +348,8 @@ public class Player : MonoBehaviour
         playerControls.Keyboard.Release.performed -= ReleaseGas;
 
         playerControls.Keyboard.Shoot.performed -= OnShoot;
+
+        playerControls.Keyboard.SwitchItem.performed -= OnSwitchItem;
 
         playerControls.Disable();
     }
@@ -356,6 +364,8 @@ public class Player : MonoBehaviour
         playerControls.Keyboard.Release.performed += ReleaseGas;
 
         playerControls.Keyboard.Shoot.performed += OnShoot;
+
+        playerControls.Keyboard.SwitchItem.performed += OnSwitchItem;
         playerControls.Enable();
     }
 
