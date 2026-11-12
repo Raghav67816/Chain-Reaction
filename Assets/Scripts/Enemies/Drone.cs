@@ -17,6 +17,7 @@ public class Drone : MonoBehaviour
     [Header("General References")]
     public Transform droneTransform;
     public Animator droneAnimator;
+    public Rigidbody2D droneBody;
 
     [Header("Lighting")]
     public Light2D scanLight;
@@ -45,6 +46,9 @@ public class Drone : MonoBehaviour
     private float currentAngle;
     private float targetAngle;
     private GameObject effect;
+
+    // state
+    private bool canMove = false;
 
     void Start()
     {
@@ -79,6 +83,11 @@ public class Drone : MonoBehaviour
             intensity,
             2f * Time.deltaTime
         );
+
+        if (canMove)
+        {
+            droneBody.linearVelocity = new Vector2(8f, droneBody.linearVelocity.y);
+        }
     }
 
     IEnumerator GenerateRandomLookUpAngles()
@@ -140,6 +149,16 @@ public class Drone : MonoBehaviour
     {
         Destroy(effect);
         Destroy(gameObject);
+    }
+
+    public void MoveDrone()
+    {
+        canMove = true;
+    }
+
+    public void StopDrone()
+    {
+        canMove = false;
     }
 
     void OnDestroy()
