@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class FoodHoverAnimation : MonoBehaviour
@@ -14,7 +13,7 @@ public class FoodHoverAnimation : MonoBehaviour
     void Start()
     {
         startPosition = transform.position;
-        randomOffset = UnityEngine.Random.Range(0f, 100f);
+        randomOffset = Random.Range(0f, 100f);
     }
 
     void Update()

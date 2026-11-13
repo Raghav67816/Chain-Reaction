@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using UnityEngine.InputSystem;
 
 public class MainMenu : MonoBehaviour
 {
@@ -24,22 +23,54 @@ public class MainMenu : MonoBehaviour
     [Header("Cursor")]
     public Texture2D cursor;
 
+    [Header("Bounds")]
+    public Transform left;
+    public Transform right;
+
+    private Vector2 newDronePos;
+    private FoodHoverAnimation hoverAnimation;
+
     void Start()
     {
-        drone.StopDrone();
+        hoverAnimation = drone.gameObject.GetComponent<FoodHoverAnimation>();
+
         Cursor.SetCursor(cursor, Camera.main.transform.position, CursorMode.Auto);
+        StartCoroutine(FindNewPos());
     }
 
     void FixedUpdate()
     {
-        Vector3 mouseScreenPos = Input.mousePosition;
-        mouseScreenPos.z = Mathf.Abs(Camera.main.transform.position.z);
+        Vector2 smoothPos = Vector2.MoveTowards(
+            drone.droneBody.position,
+            newDronePos,
+            4f * Time.fixedDeltaTime
+        );
 
-        Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
+        drone.droneBody.MovePosition(smoothPos);
 
-        if(!Mathf.Approximately(mouseWorldPos.magnitude, drone.droneBody.transform.position.magnitude))
+        if(drone.droneBody.linearVelocity.magnitude < 0.5f)
         {
-            drone.droneBody.MovePosition(mouseWorldPos);
+            hoverAnimation.enabled = true;
+        }
+
+        else
+        {
+            hoverAnimation.enabled = false;
+        }
+    }
+
+    IEnumerator FindNewPos()
+    {
+        while (true)
+        {
+            Vector2 newPos = new Vector2(
+                Random.Range(left.transform.position.x, right.transform.position.x),
+                Random.Range(left.transform.position.y, right.transform.position.y)
+            );
+
+            newDronePos = newPos;
+
+            yield return new WaitForSeconds(5f);
         }
     }
 

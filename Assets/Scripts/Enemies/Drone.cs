@@ -69,7 +69,6 @@ public class Drone : MonoBehaviour
 
         angle = currentAngle;
 
-        Debug.Log(droneBody.linearVelocity);
     }
 
     void FixedUpdate()
@@ -155,7 +154,6 @@ public class Drone : MonoBehaviour
 
     public void MoveDrone()
     {
-        Debug.Log("move drone was called");
         canMove = true;
     }
 
