@@ -68,6 +68,8 @@ public class Drone : MonoBehaviour
         scanLight.transform.eulerAngles = new Vector3(0f, 0f, currentAngle);
 
         angle = currentAngle;
+
+        Debug.Log(droneBody.linearVelocity);
     }
 
     void FixedUpdate()
@@ -153,6 +155,7 @@ public class Drone : MonoBehaviour
 
     public void MoveDrone()
     {
+        Debug.Log("move drone was called");
         canMove = true;
     }
 

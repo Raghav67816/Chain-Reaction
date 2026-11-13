@@ -257,6 +257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36f7128fbf6195c4f9bc241f4fd8c4b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
+  drone: {fileID: 1994119502}
   playBtn: {fileID: 694538374}
   settingsBtn: {fileID: 1067200649}
   exitBtn: {fileID: 210922062}
@@ -264,6 +265,7 @@ MonoBehaviour:
   clickSound: {fileID: 8300000, guid: 5bda20f1ed4e4d642801b988fe7a7638, type: 3}
   hoverSound: {fileID: 8300000, guid: 5acc2576d94469f41916e9e0aa479809, type: 3}
   samMessage: {fileID: 8300000, guid: e87707abf1f7908429de3f7473b864fc, type: 3}
+  cursor: {fileID: 2800000, guid: d2f80cce4c7471e48aaf31dee55db6ea, type: 3}
 --- !u!1 &210922060
 GameObject:
   m_ObjectHideFlags: 0
@@ -4120,7 +4122,7 @@ TilemapCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1467224176}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -6717,6 +6719,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1985898987}
   m_CullTransparentMesh: 1
+--- !u!114 &1994119502 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8653237038554403571, guid: 47ba03130a1f5a24bb001cf2a58fd5e3, type: 3}
+  m_PrefabInstance: {fileID: 813920557}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90643e4d90c3a8c43ae10f6b39e8e4b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Drone
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -20,6 +20,6 @@ public class FoodHoverAnimation : MonoBehaviour
     void Update()
     {
         float newY = startPosition.y + Mathf.Sin(Time.time * hoverSpeed + randomOffset) * hoverHeight;
-        transform.localPosition = new Vector2(startPosition.x, newY);
+        transform.localPosition = new Vector2(transform.localPosition.x, newY);
     }
 }
