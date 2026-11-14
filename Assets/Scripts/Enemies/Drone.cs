@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Rendering.Universal;
-using Unity.Cinemachine;
 
 public enum DroneState
 {

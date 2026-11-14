@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using Unity.Cinemachine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class Player : MonoBehaviour
 
     // Events
     public static event Action<InventoryItem, GameObject> OnItemInteraction;
+    public static event Action<bool> OnPausePressed;
     public static event Action<Sprite> OnItemUsed;
 
     [Header("Effects")]
@@ -54,6 +56,8 @@ public class Player : MonoBehaviour
     public Slider healthSlider;
     public Slider gasSlider;
     public Image crosshair;
+
+    private bool isPauseMenuOpen = false;
 
     private SpriteRenderer activeItemSprite;
 
