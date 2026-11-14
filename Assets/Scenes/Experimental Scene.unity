@@ -269,8 +269,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        - m_Target: {fileID: 611100222}
+          m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
           m_MethodName: PlayHoverSound
           m_Mode: 1
           m_Arguments:
@@ -325,9 +325,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OnPlayClicked
+      - m_Target: {fileID: 611100222}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: OnResumeClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1168,7 +1168,7 @@ Transform:
   m_GameObject: {fileID: 509871035}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.592829, y: 0.49607, z: -10}
+  m_LocalPosition: {x: -6.5762405, y: 0.49605, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1581,7 +1581,10 @@ MonoBehaviour:
       m_Flags: 0
     m_Flags: 0
     m_Priority: 0
-  cursorTexture: {fileID: 0}
+  mainSource: {fileID: 661148606}
+  hoverSound: {fileID: 8300000, guid: 5acc2576d94469f41916e9e0aa479809, type: 3}
+  clickSound: {fileID: 8300000, guid: 5bda20f1ed4e4d642801b988fe7a7638, type: 3}
+  cursorTexture: {fileID: 2800000, guid: d2f80cce4c7471e48aaf31dee55db6ea, type: 3}
 --- !u!1 &624874336
 GameObject:
   m_ObjectHideFlags: 0
@@ -5837,8 +5840,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        - m_Target: {fileID: 611100222}
+          m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
           m_MethodName: PlayHoverSound
           m_Mode: 1
           m_Arguments:
@@ -5893,9 +5896,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OnPlayClicked
+      - m_Target: {fileID: 611100222}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: PlayClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9752,8 +9755,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        - m_Target: {fileID: 611100222}
+          m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
           m_MethodName: PlayHoverSound
           m_Mode: 1
           m_Arguments:
@@ -9808,9 +9811,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: OnPlayClicked
+      - m_Target: {fileID: 611100222}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: PlayClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 611100222}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: OnQuitClicked
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10064,6 +10079,10 @@ MonoBehaviour:
   walkSounds:
   - {fileID: 8300000, guid: 023ea3ddeaa8dd146b7633a0800e5a0e, type: 3}
   - {fileID: 8300000, guid: 2352822feb4caa14ebdbc0c713289f8d, type: 3}
+  heliSounds:
+  - {fileID: 8300000, guid: 954ac76a388c5ff4caa5333209fa786c, type: 3}
+  - {fileID: 8300000, guid: e2f5bb6a6f6171347a3ab4c90531f0f7, type: 3}
+  - {fileID: 8300000, guid: 9568ef13b8233514aa5d5d16610356e1, type: 3}
   bodyMass: 80
   playerHealth: 100
   foot: {fileID: 1630559115}

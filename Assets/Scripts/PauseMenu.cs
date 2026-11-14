@@ -22,6 +22,11 @@ public class PauseMenu : MonoBehaviour
     [Header("Input")]
     public InputAction pauseAction;
 
+    [Header("Sound")]
+    public AudioSource mainSource;
+    public AudioClip hoverSound;
+    public AudioClip clickSound;
+
     [Header("Cursor")]
     public Texture2D cursorTexture;
 
@@ -32,7 +37,12 @@ public class PauseMenu : MonoBehaviour
         ApplyTheme();
     }
 
-    void TogglePauseMenu(InputAction.CallbackContext context)
+    void ToggleMenu(InputAction.CallbackContext context)
+    {
+        TogglePauseMenu();
+    }
+
+    void TogglePauseMenu()
     {
         Debug.Log("pause menu was toggled");
         Scene currentScene = SceneManager.GetActiveScene();
@@ -43,7 +53,20 @@ public class PauseMenu : MonoBehaviour
             pauseCanvas.SetActive(isPauseMenuOpen);
 
             Cursor.lockState = CursorLockMode.None;
-            Cursor.SetCursor(cursorTexture, Camera.main.transform.position, CursorMode.Auto);
+            Cursor.visible = true;
+            Cursor.SetCursor(cursorTexture, Vector2.zero, CursorMode.Auto);
+
+            if (isPauseMenuOpen)
+            {
+                mainSource.Stop();
+            }
+
+            else
+            {
+                mainSource.Play();
+
+                Cursor.lockState = CursorLockMode.Locked;
+            }
         }
     }
 
@@ -90,17 +113,38 @@ public class PauseMenu : MonoBehaviour
         if (quitText != null) quitText.color = new Color(1.00f, 0.80f, 0.83f, 1f);
     }
 
+    public void PlayHoverSound()
+    {
+        mainSource.PlayOneShot(hoverSound);
+    }
+
+    public void PlayClickSound()
+    {
+        mainSource.PlayOneShot(clickSound);
+    }
+
+    public void OnResumeClicked()
+    {
+        PlayClickSound();
+        TogglePauseMenu();
+    }
+
+    public void OnQuitClicked()
+    {
+        SceneManager.LoadSceneAsync(0);
+    }
+
     void OnEnable()
     {
         pauseAction.Enable();
 
-        pauseAction.performed += TogglePauseMenu;
+        pauseAction.performed += ToggleMenu;
     }
 
     void OnDisable()
     {
         pauseAction.Disable();
 
-        pauseAction.performed -= TogglePauseMenu;
+        pauseAction.performed -= ToggleMenu;
     }
 }

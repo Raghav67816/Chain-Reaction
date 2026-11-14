@@ -1,10 +1,9 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Unity.Cinemachine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
-using Unity.Cinemachine;
-using System;
-using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -28,6 +27,7 @@ public class Player : MonoBehaviour
     [Header("Sounds")]
     public List<AudioClip> jumpSounds;
     public List<AudioClip> walkSounds;
+    public List<AudioClip> heliSounds;
 
     [Header("Body")]
     public float bodyMass = 80.0f; // in kg
@@ -56,8 +56,6 @@ public class Player : MonoBehaviour
     public Slider healthSlider;
     public Slider gasSlider;
     public Image crosshair;
-
-    private bool isPauseMenuOpen = false;
 
     private SpriteRenderer activeItemSprite;
 
@@ -221,6 +219,9 @@ public class Player : MonoBehaviour
                 direction * thrust,
                 ForceMode2D.Impulse
             );
+
+            int r = UnityEngine.Random.Range(0, heliSounds.Count);
+            playerAudio.PlayOneShot(heliSounds[r]);
 
             Instantiate(dashEffect, back.transform.position, Quaternion.identity);
 
