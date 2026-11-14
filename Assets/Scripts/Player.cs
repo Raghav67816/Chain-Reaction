@@ -15,9 +15,12 @@ public class Player : MonoBehaviour
     private CinemachineImpulseSource impulseSource;
 
     // Events
-    public static event Action<InventoryItem, GameObject> OnItemInteraction;
-    public static event Action<bool> OnPausePressed;
     public static event Action<Sprite> OnItemUsed;
+    public static event Action<bool> OnPausePressed;
+
+    // for development only
+    public static event Action<Objective> OnObjectiveComplete;
+    public static event Action<InventoryItem, GameObject> OnItemInteraction;
 
     [Header("Effects")]
     public ParticleSystem eatBurst;
@@ -277,6 +280,11 @@ public class Player : MonoBehaviour
             Destroy(collision.gameObject);
 
             StartCoroutine(IncreaseSlider(gasSlider, playerBody.mass * 2 / 100));
+        }
+
+        if(collision.gameObject.name == "Trigger")
+        {
+            Debug.Log("triggered");
         }
     }
 

@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
+using System.Collections.Generic;
+using System.Collections;
 
 public struct Objective
 {
@@ -21,7 +21,7 @@ public class ObjectivesManager : MonoBehaviour
     // starting positions for objectives
     private int startX = 50;
     private int startY = -25;
-    private Dictionary<int, Objective> objectives;
+    private Dictionary<int, Objective> objectives = new Dictionary<int, Objective>();
 
     [Header("Canvas Settings")]
     public Canvas canvas;
@@ -33,7 +33,12 @@ public class ObjectivesManager : MonoBehaviour
     public Color completeColor;
 
     // events
-    public static event Action<Objective> onNewObjective;
+    public static event Action<Objective> OnNewObjective;
+
+    void Start()
+    {
+        StartCoroutine(AddObjective());
+    }
 
     /*
     a note for me...
@@ -50,20 +55,22 @@ public class ObjectivesManager : MonoBehaviour
             return;
         }
 
-        TextMeshProUGUI obj = new TextMeshProUGUI
-        {
-            text = text,
-            fontStyle = fontStyle,
-            fontSize = fontSize,
-            color = incompleteColor
-        };
+        GameObject objGame = new GameObject(text, typeof(RectTransform));
+        objGame.transform.SetParent(canvas.transform, false);
+
+        TextMeshProUGUI obj = objGame.AddComponent<TextMeshProUGUI>();
+
+        obj.text = text;
+        obj.fontStyle = fontStyle;
+        obj.fontSize = fontSize;
+        obj.color = incompleteColor;
 
         Objective objective = new Objective(obj);
         objectives.Add(id, objective);
 
         UpdateObjectiveInUI(objective);
 
-        onNewObjective.Invoke(objective);
+        OnNewObjective?.Invoke(objective);
     }
 
     private void UpdateObjectiveInUI(Objective obj)
@@ -77,5 +84,28 @@ public class ObjectivesManager : MonoBehaviour
             ),
             Quaternion.identity
         );
+    }
+
+    public void OnObjectiveComplete(int id)
+    {
+        Objective obj;
+        if(objectives.TryGetValue(id, out obj))
+        {
+            obj.isComplete = true;
+            UpdateObjectiveInUI(obj);
+        }
+    }
+
+    // for development only
+    IEnumerator AddObjective()
+    {
+        WaitForSeconds waitTime = new WaitForSeconds(1f);
+        for(int i=0; i<5; i++)
+        {
+            Debug.Log(i);
+            yield return waitTime;
+        }
+
+        NewObjective(23, "Hello");
     }
 }
