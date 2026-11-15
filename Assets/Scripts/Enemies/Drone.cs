@@ -115,6 +115,8 @@ public class Drone : MonoBehaviour
         {
             StartCoroutine(DrainScanLight());
             droneAnimator.SetBool("isDead", true);
+
+            dropBag.DropItem(gameObject);
         }
 
         if(obj.layer == LayerMask.NameToLayer("Balloon"))
@@ -122,8 +124,6 @@ public class Drone : MonoBehaviour
             int r = Random.Range(0, waterSplashSounds.Length);
             AudioSource.PlayClipAtPoint(waterSplashSounds[r], Camera.main.transform.position);
         }
-
-        dropBag.DropItem(gameObject);
 
         AudioSource.PlayClipAtPoint(droneHit, Camera.main.transform.position);
         Destroy(hitObject);

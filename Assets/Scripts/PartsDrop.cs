@@ -14,11 +14,12 @@ public class PartsDrop : MonoBehaviour
 
         SpriteRenderer renderer = item.AddComponent<SpriteRenderer>();
         renderer.sprite = powerItems[random].itemSprite;
+        renderer.sortingOrder = -9;
 
         Rigidbody2D body = item.AddComponent<Rigidbody2D>();
         BoxCollider2D collider = item.AddComponent<BoxCollider2D>();
         collider.isTrigger = true;
 
-        body.AddForce(Vector2.up * 2f);
+        body.AddForce(Vector2.up * 2f, ForceMode2D.Impulse);
     }
 }

@@ -1078,7 +1078,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 302cf3a5f96c3b045a9c9851dc6229df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PartsDrop
-  powerItems: []
+  powerItems:
+  - {fileID: 11400000, guid: c960a2b7419255b419b680aff93eee8d, type: 2}
 --- !u!4 &479376680
 Transform:
   m_ObjectHideFlags: 0
@@ -6314,6 +6315,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8653237038554403571, guid: 47ba03130a1f5a24bb001cf2a58fd5e3, type: 3}
+      propertyPath: dropBag
+      value: 
+      objectReference: {fileID: 479376679}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

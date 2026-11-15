@@ -86,7 +86,7 @@ public class InventoryManager : MonoBehaviour
 
             else
             {
-                ItemEntry newEntry = new ItemEntry{ count = 1, sprite = item.sprite };
+                ItemEntry newEntry = new ItemEntry { count = 1, sprite = item.sprite };
 
                 inventory.Add(item.name, newEntry);
                 UpdateItemCountUI(item.name, 1);
@@ -127,22 +127,22 @@ public class InventoryManager : MonoBehaviour
         itemCountTexts[itemIndex].text = count.ToString();
     }
 
-    
+
     void OnItemUsed(Sprite item)
     {
         string[] keys = inventory.Keys.ToArray();
 
-        for(int i=0; i<itemImages.Count(); i++)
+        for (int i = 0; i < itemImages.Count(); i++)
         {
-            if(itemImages[i].sprite == item)
+            if (itemImages[i].sprite == item)
             {
                 ItemEntry entry;
-                if(inventory.TryGetValue(keys[i], out entry))
+                if (inventory.TryGetValue(keys[i], out entry))
                 {
                     entry.count--;
                     UpdateItemCountUI(keys[i], entry.count);
 
-                    if(entry.count < 1)
+                    if (entry.count < 1)
                     {
                         OnItemExhausted.Invoke(itemImages[i].sprite);
                         itemImages[i].sprite = null;
@@ -167,55 +167,39 @@ public class InventoryManager : MonoBehaviour
     {
         float input = ctx.ReadValue<float>();
 
-        if(inventory.Count == 1)
-        {
-            SetItemActive();
-            
-            ItemEntry item;
-            if(inventory.TryGetValue(inventory.Keys.ToList()[activeItem], out item))
-            {
-                Debug.Log(item.sprite.name);
-                OnItemEquipped.Invoke(item.sprite);
-            }
-        }
+        if (inventory.Count() == 0) return;
 
-        if(input < -.1f && activeItem > 0)
+        if (input < -.1f && activeItem > 0)
         {
             activeItem--;
-            SetItemActive();
-
-            ItemEntry item;
-            if(inventory.TryGetValue(inventory.Keys.ToList()[activeItem], out item))
-            {
-                Debug.Log(item.sprite.name);
-                OnItemEquipped.Invoke(item.sprite);
-            }
         }
 
-        if(input > 0.1f && activeItem < inventory.Keys.Count - 1)
+        if (input > 0.1f && activeItem < inventory.Keys.Count - 1)
         {
             activeItem++;
-            SetItemActive();
-            
-            ItemEntry item;
-            if(inventory.TryGetValue(inventory.Keys.ToList()[activeItem], out item))
-            {
-                OnItemEquipped?.Invoke(item.sprite);
-            }
         }
+
+        ItemEntry item;
+        if (inventory.TryGetValue(inventory.Keys.ToList()[activeItem], out item))
+        {
+            Debug.Log(item.sprite.name);
+            OnItemEquipped.Invoke(item.sprite);
+        }
+
+        SetItemActive();
     }
 
 
     void SetItemActive()
     {
-        for(int i = 0; i<itemImages.Length; i++)
+        for (int i = 0; i < itemImages.Length; i++)
         {
-            if(itemImages[i] == null) continue;
+            if (itemImages[i] == null) continue;
 
             Outline outline = itemImages[i].GetComponent<Outline>();
-            if(outline != null)
+            if (outline != null)
             {
-                if(i == activeItem)
+                if (i == activeItem)
                 {
                     outline.effectDistance = activeItemEffect;
                 }
