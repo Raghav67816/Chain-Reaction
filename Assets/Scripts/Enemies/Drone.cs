@@ -17,6 +17,7 @@ public class Drone : MonoBehaviour
     public Transform droneTransform;
     public Animator droneAnimator;
     public Rigidbody2D droneBody;
+    public PartsDrop dropBag;
 
     [Header("Lighting")]
     public Light2D scanLight;
@@ -122,6 +123,8 @@ public class Drone : MonoBehaviour
             AudioSource.PlayClipAtPoint(waterSplashSounds[r], Camera.main.transform.position);
         }
 
+        dropBag.DropItem(gameObject);
+
         AudioSource.PlayClipAtPoint(droneHit, Camera.main.transform.position);
         Destroy(hitObject);
     }
@@ -129,7 +132,6 @@ public class Drone : MonoBehaviour
     IEnumerator DrainScanLight()
     {
         float randomSub = Random.Range(0f, 10f);
-        int n = Random.Range(2, 5);
         while (scanLight.intensity > 0f)
         {
             intensity -= randomSub;
