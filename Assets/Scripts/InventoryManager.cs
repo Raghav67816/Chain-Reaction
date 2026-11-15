@@ -229,4 +229,10 @@ public class InventoryManager : MonoBehaviour
 
         switchAction.Disable();
     }
+
+    void OnDestroy()
+    {
+        Player.OnItemInteraction -= OnPlayerInteraction;
+        Player.OnItemUsed -= OnItemUsed;
+    }
 }
