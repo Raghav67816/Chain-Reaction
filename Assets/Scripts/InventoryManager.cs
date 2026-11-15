@@ -166,7 +166,20 @@ public class InventoryManager : MonoBehaviour
     void SwitchItem(InputAction.CallbackContext ctx)
     {
         float input = ctx.ReadValue<float>();
-        if(input == -1 && activeItem > 0)
+
+        if(inventory.Count == 1)
+        {
+            SetItemActive();
+            
+            ItemEntry item;
+            if(inventory.TryGetValue(inventory.Keys.ToList()[activeItem], out item))
+            {
+                Debug.Log(item.sprite.name);
+                OnItemEquipped.Invoke(item.sprite);
+            }
+        }
+
+        if(input < -.1f && activeItem > 0)
         {
             activeItem--;
             SetItemActive();
@@ -179,7 +192,7 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        if(input == 1 && activeItem < inventory.Keys.Count - 1)
+        if(input > 0.1f && activeItem < inventory.Keys.Count - 1)
         {
             activeItem++;
             SetItemActive();
