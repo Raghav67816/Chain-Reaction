@@ -40,6 +40,7 @@ public class Drone : MonoBehaviour
     public AudioClip droneHit;
     public AudioClip droneShoot;
     public AudioClip droneSpark;
+    public AudioClip[] waterSplashSounds;
 
     // angles
     private float currentAngle;
@@ -113,6 +114,12 @@ public class Drone : MonoBehaviour
         {
             StartCoroutine(DrainScanLight());
             droneAnimator.SetBool("isDead", true);
+        }
+
+        if(obj.layer == LayerMask.NameToLayer("Balloon"))
+        {
+            int r = Random.Range(0, waterSplashSounds.Length);
+            AudioSource.PlayClipAtPoint(waterSplashSounds[r], Camera.main.transform.position);
         }
 
         AudioSource.PlayClipAtPoint(droneHit, Camera.main.transform.position);

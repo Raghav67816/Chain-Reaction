@@ -1,9 +1,9 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    private GameObject projectile;
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D projectileBody;
     private CircleCollider2D collider;

@@ -59,6 +59,7 @@ public class PauseMenu : MonoBehaviour
             if (isPauseMenuOpen)
             {
                 mainSource.Stop();
+                Time.timeScale = 0f;
             }
 
             else
@@ -66,6 +67,7 @@ public class PauseMenu : MonoBehaviour
                 mainSource.Play();
 
                 Cursor.lockState = CursorLockMode.Locked;
+                Time.timeScale = 1f;
             }
         }
     }
@@ -127,6 +129,8 @@ public class PauseMenu : MonoBehaviour
     {
         PlayClickSound();
         TogglePauseMenu();
+
+        Time.timeScale = 1f;
     }
 
     public void OnQuitClicked()
