@@ -8,18 +8,28 @@ public class PartsDrop : MonoBehaviour
     {
         int random = Random.Range(0, powerItems.Length);
 
-        // spawn a game object with sprite renderer
         GameObject item = new GameObject(powerItems[random].itemName);
         item.transform.position = target.transform.position;
 
         SpriteRenderer renderer = item.AddComponent<SpriteRenderer>();
+        renderer.gameObject.transform.localScale = new Vector3(2f, 2f, 1f);
         renderer.sprite = powerItems[random].itemSprite;
-        renderer.sortingOrder = -9;
 
         Rigidbody2D body = item.AddComponent<Rigidbody2D>();
         BoxCollider2D collider = item.AddComponent<BoxCollider2D>();
-        collider.isTrigger = true;
+        collider.isTrigger = false;
 
-        body.AddForce(Vector2.up * 2f, ForceMode2D.Impulse);
+        BoxCollider2D triggerBox = item.AddComponent<BoxCollider2D>();
+        triggerBox.size = collider.size * 1.2f;
+        triggerBox.isTrigger = true;
+
+        InventoryItemMono itemMono = item.AddComponent<InventoryItemMono>();
+        InventoryItem inventoryItem = ScriptableObject.CreateInstance<InventoryItem>();
+
+        itemMono.item = inventoryItem;
+
+        inventoryItem.itemName = powerItems[random].itemName;
+        inventoryItem.category = "";
+        inventoryItem.sprite = powerItems[random].itemSprite;
     }
 }
