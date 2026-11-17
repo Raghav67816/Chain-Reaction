@@ -6271,6 +6271,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2655777090620587660, guid: 47ba03130a1f5a24bb001cf2a58fd5e3, type: 3}
+      propertyPath: m_Mass
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 4242368795242814144, guid: 47ba03130a1f5a24bb001cf2a58fd5e3, type: 3}
       propertyPath: m_Name
       value: Drone

@@ -18,6 +18,7 @@ public class Drone : MonoBehaviour
     public Animator droneAnimator;
     public Rigidbody2D droneBody;
     public PartsDrop dropBag;
+    public CircleCollider2D collider;
 
     [Header("Lighting")]
     public Light2D scanLight;
@@ -31,7 +32,7 @@ public class Drone : MonoBehaviour
     public float scanRadius = 5f;
 
     [Header("Health")]
-    public float health = 100f;
+    public float health = 5f;
     public float maxHealth = 100f;
     public Image healthBar;
 
@@ -116,6 +117,8 @@ public class Drone : MonoBehaviour
             StartCoroutine(DrainScanLight());
             droneAnimator.SetBool("isDead", true);
 
+            collider.enabled = false;
+
             dropBag.DropItem(gameObject);
         }
 
@@ -131,11 +134,18 @@ public class Drone : MonoBehaviour
 
     IEnumerator DrainScanLight()
     {
+        bool isAudioPlaying = false;
         float randomSub = Random.Range(0f, 10f);
         while (scanLight.intensity > 0f)
         {
             intensity -= randomSub;
-            AudioSource.PlayClipAtPoint(droneSpark, Camera.main.transform.position);
+
+            if (!isAudioPlaying)
+            {
+                AudioSource.PlayClipAtPoint(droneSpark, Camera.main.transform.position);
+                isAudioPlaying = true;
+            }
+
             yield return new WaitForSeconds(randomSub/100f);
 
             if(scanLight.intensity <= 0f){

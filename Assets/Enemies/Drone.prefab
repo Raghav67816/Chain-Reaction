@@ -256,6 +256,8 @@ MonoBehaviour:
   droneTransform: {fileID: 5860845210328586911}
   droneAnimator: {fileID: 1299387043828466397}
   droneBody: {fileID: 2655777090620587660}
+  dropBag: {fileID: 0}
+  collider: {fileID: 3520770419081319462}
   scanLight: {fileID: 4116374747147768094}
   angle: 0
   normalSpeed: 5
@@ -268,6 +270,7 @@ MonoBehaviour:
   droneHit: {fileID: 8300000, guid: 0966795a9c001c345a43a54ba4caba6d, type: 3}
   droneShoot: {fileID: 8300000, guid: f5cfdcb8930f8e347b8dbf40abe148e5, type: 3}
   droneSpark: {fileID: 8300000, guid: 634b6e4a1cb3ff948a2f27419abcfff5, type: 3}
+  waterSplashSounds: []
 --- !u!58 &3520770419081319462
 CircleCollider2D:
   m_ObjectHideFlags: 0

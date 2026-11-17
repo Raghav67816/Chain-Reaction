@@ -7,14 +7,17 @@ public class Projectile : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D projectileBody;
     private CircleCollider2D collider;
+    // private CircleCollider2D outerCollider;
     private int targetLayer;
+    private int groundLayer;
 
     public static event Action<GameObject, GameObject, float> OnProjectileHit;
 
     void Start()
     {
         targetLayer = LayerMask.NameToLayer("Enemy");
-        if(targetLayer != 8)
+        groundLayer = LayerMask.NameToLayer("Ground");
+        if(targetLayer != 8 && groundLayer != 6)
         {
             Debug.Log("layer not found");
         }
@@ -33,6 +36,11 @@ public class Projectile : MonoBehaviour
         collider = gameObject.AddComponent<CircleCollider2D>();
         collider.isTrigger = true;
         collider.radius = 0.2f;
+
+        // outerCollider = gameObject.AddComponent<CircleCollider2D>();
+        // outerCollider.isTrigger = false;
+        // outerCollider.radius = collider.radius * 1.2f;
+        // outerCollider.enabled = false;
     }
 
     public void Launch(Vector2 direction)
@@ -56,9 +64,10 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.layer == targetLayer)
+        if(collision.gameObject.layer == targetLayer && collider.isTrigger)
         {
             OnProjectileHit.Invoke(collision.gameObject, gameObject, 20f);
+            collider.isTrigger = false;
         }
     }
 }
