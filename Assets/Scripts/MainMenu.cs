@@ -26,6 +26,9 @@ public class MainMenu : MonoBehaviour
     [Header("Bounds")]
     public Transform left;
     public Transform right;
+    
+    [Header("Panels")]
+    public GameObject controlsMenu;
 
     private Vector2 newDronePos;
     private FoodHoverAnimation hoverAnimation;
@@ -84,6 +87,16 @@ public class MainMenu : MonoBehaviour
         playBtn.enabled = false;
         audioSource.PlayOneShot(clickSound);
         StartCoroutine(PlayMessage());
+    }
+
+    public void OnControlsClicked()
+    {
+        controlsMenu.SetActive(true);
+    }
+
+    public void OnControlsCloseClicked()
+    {
+        controlsMenu.SetActive(false);
     }
 
     IEnumerator PlayMessage()

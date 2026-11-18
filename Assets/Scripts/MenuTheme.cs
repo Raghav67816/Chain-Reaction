@@ -8,11 +8,17 @@ public class MenuTheme : MonoBehaviour
     public Button playBtn;
     public Button settingsBtn;
     public Button quitBtn;
+    public Button controllerBtn;
+    public Button controllerCloseBtn;
 
     [Header("Text")]
     public TextMeshProUGUI playText;
     public TextMeshProUGUI settingsText;
     public TextMeshProUGUI quitText;
+    public TextMeshProUGUI controllerCloseText;
+
+    [Header("Icons")]
+    public Image controllerIcon;
 
     void Start()
     {
@@ -60,5 +66,29 @@ public class MenuTheme : MonoBehaviour
         }
 
         if(quitText != null) quitText.color = new Color(1.00f, 0.80f, 0.83f, 1f);
+
+        if(controllerBtn != null)
+        {
+            ColorBlock cb = controllerBtn.colors;
+            cb.normalColor = new Color(0.23f, 0.32f, 0.43f, 1f);
+            cb.highlightedColor = new Color(0.28f, 0.40f, 0.53f, 1f);
+            cb.pressedColor = new Color(0.16f, 0.23f, 0.31f, 1f);
+            cb.selectedColor = new Color(0.28f, 0.40f, 0.53f, 1f);
+            cb.colorMultiplier = 1f;
+            controllerBtn.colors = cb;
+        }
+
+        if(controllerCloseBtn != null)
+        {
+            ColorBlock cb = controllerCloseBtn.colors;
+            cb.normalColor = new Color(0.36f, 0.11f, 0.14f, 1f);
+            cb.highlightedColor = new Color(0.53f, 0.11f, 0.15f, 1f);
+            cb.pressedColor = new Color(0.23f, 0.07f, 0.09f, 1f);
+            cb.selectedColor = new Color(0.53f, 0.11f, 0.15f, 1f);
+            cb.colorMultiplier = 1f;
+            controllerCloseBtn.colors = cb;
+        }
+
+        if(controllerCloseText != null) controllerCloseText.color = new Color(1.00f, 0.80f, 0.83f, 1f);
     }
 }

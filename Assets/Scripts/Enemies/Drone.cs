@@ -32,7 +32,7 @@ public class Drone : MonoBehaviour
     public float scanRadius = 5f;
 
     [Header("Health")]
-    public float health = 5f;
+    public float health = 10f;
     public float maxHealth = 100f;
     public Image healthBar;
 

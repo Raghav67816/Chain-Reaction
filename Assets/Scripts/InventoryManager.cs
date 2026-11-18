@@ -42,11 +42,11 @@ public class InventoryManager : MonoBehaviour
         Player.OnItemUsed += OnItemUsed;
     }
 
-    void OnPlayerInteraction(InventoryItem item, GameObject gameObject)
+    void OnPlayerInteraction(InventoryItem item, GameObject obj)
     {
         if (AddItem(item))
         {
-            Destroy(gameObject);
+            Destroy(obj);
         }
     }
 
