@@ -355,6 +355,9 @@ public class Player : MonoBehaviour
 
         playerControls.Keyboard.Shoot.performed -= OnShoot;
 
+        InventoryManager.OnItemEquipped -= OnItemEquipped;
+        InventoryManager.OnItemExhausted -= OnItemExhausted;
+
         playerControls.Disable();
     }
 

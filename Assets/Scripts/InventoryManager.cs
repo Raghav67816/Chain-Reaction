@@ -46,7 +46,7 @@ public class InventoryManager : MonoBehaviour
     {
         if (AddItem(item))
         {
-            Destroy(obj);
+            obj.SetActive(false);
         }
     }
 
