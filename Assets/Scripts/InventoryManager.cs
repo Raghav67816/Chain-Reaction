@@ -156,19 +156,16 @@ public class InventoryManager : MonoBehaviour
                         outline.effectDistance = Vector2.zero;
                         UpdateItemCountUI(keys[i], 0);
 
+                        inventory.Remove(keys[i]);
+
                         for(int j=0; j<itemImages.Count(); j++)
                         {
-                            if(itemImages[j].sprite != null && items[j].sprite == itemImages[j])
+                            if(itemImages[j].sprite != null)
                             {
-                                ItemEntry newEntry;
-                                if(inventory.TryGetValue(items[j].name, out newEntry))
-                                {
-                                    UpdateItemUI(newEntry);
-                                }
+                                activeItem = j;
+                                SetItemActive();
                             }
                         }
-
-                        inventory.Remove(keys[i]);
                     }
                 }
             }
