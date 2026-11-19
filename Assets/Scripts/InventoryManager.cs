@@ -164,6 +164,7 @@ public class InventoryManager : MonoBehaviour
                             {
                                 activeItem = j;
                                 SetItemActive();
+                                OnItemEquipped.Invoke(itemImages[j].sprite);
                             }
                         }
                     }
@@ -220,25 +221,6 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
-
-    // private InventoryItem GetItemByEntry(ItemEntry entry)
-    // {
-    //     ItemEntry item;
-    //     InventoryItem inventoryItem;
-    //     string[] keys = inventory.Keys.ToArray();
-    //     for(int i=0; i<inventory.Count(); i++)
-    //     {
-    //         if(inventory.TryGetValue(keys[i], out item))
-    //         {
-    //             if(entry.sprite == items[i].sprite)
-    //             {
-    //                 inventoryItem = items[i];
-    //             }
-    //         }
-    //     }
-
-    //     return inventoryItem;
-    // }
 
 
     void OnEnable()

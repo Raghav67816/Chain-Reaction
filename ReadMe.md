@@ -32,8 +32,6 @@ Collect the parts, create new gadgets and fight other powerful machine, solve pu
 
 
 ## Note
- - Inventory Manager has some bug, idk what it is (for now). So, always use the right most item first, otherwise you won't be able to use other items.
-
  - The HUD and UI stuff looks very small, while the actual graphics look very big. I will fix this.
 
  - Quit might not be working
