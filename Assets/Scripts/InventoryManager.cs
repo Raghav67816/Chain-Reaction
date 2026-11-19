@@ -9,6 +9,7 @@ using System;
 public class ItemEntry
 {
     public int count;
+    public string name;
     public Sprite sprite;
 }
 
@@ -90,7 +91,7 @@ public class InventoryManager : MonoBehaviour
 
                 inventory.Add(item.name, newEntry);
                 UpdateItemCountUI(item.name, 1);
-                UpdateItemUI(item);
+                UpdateItemUI(newEntry);
 
                 return true;
             }
@@ -99,7 +100,7 @@ public class InventoryManager : MonoBehaviour
         return false;
     }
 
-    void UpdateItemUI(InventoryItem item)
+    void UpdateItemUI(ItemEntry item)
     {
         foreach (Image image in itemImages)
         {
@@ -155,8 +156,19 @@ public class InventoryManager : MonoBehaviour
                         outline.effectDistance = Vector2.zero;
                         UpdateItemCountUI(keys[i], 0);
 
-                        inventory.Remove(keys[i]);
+                        for(int j=0; j<itemImages.Count(); j++)
+                        {
+                            if(itemImages[j].sprite != null && items[j].sprite == itemImages[j])
+                            {
+                                ItemEntry newEntry;
+                                if(inventory.TryGetValue(items[j].name, out newEntry))
+                                {
+                                    UpdateItemUI(newEntry);
+                                }
+                            }
+                        }
 
+                        inventory.Remove(keys[i]);
                     }
                 }
             }
@@ -211,6 +223,25 @@ public class InventoryManager : MonoBehaviour
             }
         }
     }
+
+    // private InventoryItem GetItemByEntry(ItemEntry entry)
+    // {
+    //     ItemEntry item;
+    //     InventoryItem inventoryItem;
+    //     string[] keys = inventory.Keys.ToArray();
+    //     for(int i=0; i<inventory.Count(); i++)
+    //     {
+    //         if(inventory.TryGetValue(keys[i], out item))
+    //         {
+    //             if(entry.sprite == items[i].sprite)
+    //             {
+    //                 inventoryItem = items[i];
+    //             }
+    //         }
+    //     }
+
+    //     return inventoryItem;
+    // }
 
 
     void OnEnable()

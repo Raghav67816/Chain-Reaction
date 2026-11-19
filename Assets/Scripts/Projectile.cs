@@ -46,7 +46,7 @@ public class Projectile : MonoBehaviour
     public void Launch(Vector2 direction)
     {
         projectileBody.linearVelocity = direction.normalized * 10f;
-        // Destroy(gameObject, 5f);
+        Destroy(gameObject, 10f);
     }
 
     public void FixedUpdate()
