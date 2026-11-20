@@ -263,7 +263,7 @@ MonoBehaviour:
   normalSpeed: 5
   alertSpeed: 10
   scanRadius: 5
-  health: 100
+  health: 5
   maxHealth: 100
   healthBar: {fileID: 479290446764886357}
   blastEffect: {fileID: 6438660845412631046, guid: 715def3635e948d469333f00199b457e, type: 3}

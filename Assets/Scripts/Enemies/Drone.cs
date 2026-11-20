@@ -32,7 +32,7 @@ public class Drone : MonoBehaviour
     public float scanRadius = 5f;
 
     [Header("Health")]
-    public float health = 10f;
+    public float health = 5f;
     public float maxHealth = 100f;
     public Image healthBar;
 
@@ -62,6 +62,8 @@ public class Drone : MonoBehaviour
         StartCoroutine(GenerateRandomLookUpAngles());
 
         intensity = scanLight.intensity;
+
+        dropBag = FindObjectsByType<PartsDrop>()[0];
     }
 
     void Update()
@@ -70,7 +72,6 @@ public class Drone : MonoBehaviour
         scanLight.transform.eulerAngles = new Vector3(0f, 0f, currentAngle);
 
         angle = currentAngle;
-
     }
 
     void FixedUpdate()
@@ -106,6 +107,7 @@ public class Drone : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(scanLight.transform.position, scanRadius);
+        Gizmos.DrawWireSphere(transform.position, 1f);
     }
 
     void TakeDamage(GameObject obj, GameObject hitObject, float damage)
