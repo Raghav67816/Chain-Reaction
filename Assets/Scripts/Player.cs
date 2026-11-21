@@ -281,7 +281,6 @@ public class Player : MonoBehaviour
 
             StartCoroutine(IncreaseSlider(gasSlider, playerBody.mass * 2 / 100));
         }
-
     }
 
     void OnItemEquipped(Sprite itemImage)
