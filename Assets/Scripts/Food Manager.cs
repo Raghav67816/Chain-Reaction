@@ -20,7 +20,7 @@ public class FoodManager : MonoBehaviour
             Food food = foodData[randomFood];
             foodSprite.sprite = food.foodSprite;
 
-            foodSprite.gameObject.AddComponent<FoodHoverAnimation>();
+            foodSprite.gameObject.AddComponent<HoverAnimation>();
 
             BoxCollider2D collider = foodSprite.gameObject.AddComponent<BoxCollider2D>();
             collider.isTrigger = true;

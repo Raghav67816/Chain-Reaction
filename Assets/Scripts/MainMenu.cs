@@ -31,11 +31,11 @@ public class MainMenu : MonoBehaviour
     public GameObject controlsMenu;
 
     private Vector2 newDronePos;
-    private FoodHoverAnimation hoverAnimation;
+    private HoverAnimation hoverAnimation;
 
     void Start()
     {
-        hoverAnimation = drone.gameObject.GetComponent<FoodHoverAnimation>();
+        hoverAnimation = drone.gameObject.GetComponent<HoverAnimation>();
 
         Cursor.SetCursor(cursor, Camera.main.transform.position, CursorMode.Auto);
         StartCoroutine(FindNewPos());

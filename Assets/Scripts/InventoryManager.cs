@@ -26,7 +26,7 @@ public class InventoryManager : MonoBehaviour
     public int activeItem = 0;
     public int maxSlots = 4;
     public int itemPerSlot = 5;
-    public UnityEngine.Vector2 activeItemEffect;
+    public Vector2 activeItemEffect;
 
     [Header("UI References")]
     public Image[] itemImages;

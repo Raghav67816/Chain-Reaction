@@ -8,6 +8,9 @@ public class GameOver : MonoBehaviour
     [Header("Game Over Canvas")]
     public GameObject gameOverCanvas;
 
+    [Header("Cursor")]
+    public Texture2D styledCursor;
+
     private LayerMask playerLayer;
 
     void Start()
@@ -23,6 +26,7 @@ public class GameOver : MonoBehaviour
             gameOverCanvas.SetActive(true);
 
             Cursor.lockState = CursorLockMode.None;
+            Cursor.SetCursor(styledCursor, transform.position, CursorMode.Auto);
             Cursor.visible = true;
         }
     }
