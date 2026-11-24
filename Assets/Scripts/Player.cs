@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
 
 
     [Header("Movement")]
+    public string activeItemTag;
     public float moveSpeed = 5f;
     public float jumpHeight = 2f;
     public float dashDuration = 0.3f;
@@ -67,6 +68,7 @@ public class Player : MonoBehaviour
         playerControls = new PlayerControls();
 
         activeItemSprite = holdPoint.GetComponent<SpriteRenderer>();
+        activeItemTag = holdPoint.tag;
 
         InventoryManager.OnItemEquipped += OnItemEquipped;
         InventoryManager.OnItemExhausted += OnItemExhausted;
@@ -283,9 +285,10 @@ public class Player : MonoBehaviour
         }
     }
 
-    void OnItemEquipped(Sprite itemImage)
+    void OnItemEquipped(Sprite itemImage, string tag)
     {
         activeItemSprite.sprite = itemImage;
+        activeItemTag = tag;
     }
 
     void OnShoot(InputAction.CallbackContext ctx)
@@ -301,7 +304,11 @@ public class Player : MonoBehaviour
 
             if(activeItemSprite != null)
             {
-                GameObject projectile = new GameObject("temp");
+                GameObject projectile = new GameObject("temp")
+                {
+                    tag = activeItemTag
+                };
+                Debug.Log($"We got a tag: {projectile.tag}");
                 projectile.transform.position = holdPoint.transform.position;
 
                 Projectile proj = projectile.AddComponent<Projectile>();

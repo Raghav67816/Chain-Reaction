@@ -8,7 +8,10 @@ public class PartsDrop : MonoBehaviour
     {
         int random = Random.Range(0, powerItems.Length);
 
-        GameObject item = new GameObject(powerItems[random].itemName);
+        GameObject item = new GameObject(powerItems[random].itemName)
+        {
+            tag = "Power Item"
+        };
         item.transform.position = target.transform.position;
 
         SpriteRenderer renderer = item.AddComponent<SpriteRenderer>();

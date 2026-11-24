@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -7,7 +6,6 @@ public class Projectile : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D projectileBody;
     private CircleCollider2D collider;
-    // private CircleCollider2D outerCollider;
     private int targetLayer;
     private int groundLayer;
 
@@ -17,7 +15,7 @@ public class Projectile : MonoBehaviour
     {
         targetLayer = LayerMask.NameToLayer("Enemy");
         groundLayer = LayerMask.NameToLayer("Ground");
-        if(targetLayer != 8 && groundLayer != 6)
+        if (targetLayer != 8 && groundLayer != 6)
         {
             Debug.Log("layer not found");
         }
@@ -35,12 +33,20 @@ public class Projectile : MonoBehaviour
 
         collider = gameObject.AddComponent<CircleCollider2D>();
         collider.isTrigger = true;
-        collider.radius = 0.2f;
+        collider.radius = 1f;
 
         // outerCollider = gameObject.AddComponent<CircleCollider2D>();
         // outerCollider.isTrigger = false;
         // outerCollider.radius = collider.radius * 1.2f;
         // outerCollider.enabled = false;
+
+        if (gameObject.tag == "Power Item")
+        {
+            Debug.LogError("We got a power item");
+            CircleCollider2D outerCollider = gameObject.AddComponent<CircleCollider2D>();
+            outerCollider.radius = collider.radius * 1.2f;
+            outerCollider.isTrigger = false;
+        }
     }
 
     public void Launch(Vector2 direction)
@@ -51,7 +57,7 @@ public class Projectile : MonoBehaviour
 
     public void FixedUpdate()
     {
-        if(projectileBody.linearVelocity.sqrMagnitude > 0.1f)
+        if (projectileBody.linearVelocity.sqrMagnitude > 0.1f)
         {
             float angle = Mathf.Atan2(
                 projectileBody.linearVelocity.y,
@@ -64,7 +70,7 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.layer == targetLayer && collider.isTrigger)
+        if (collision.gameObject.layer == targetLayer && collider.isTrigger)
         {
             OnProjectileHit.Invoke(collision.gameObject, gameObject, 20f);
             collider.isTrigger = false;

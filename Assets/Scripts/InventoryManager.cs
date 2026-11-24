@@ -1,7 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine.InputSystem;
 using System;
@@ -11,16 +9,13 @@ public class ItemEntry
     public int count;
     public string name;
     public Sprite sprite;
+    public string category;
 }
 
 public class InventoryManager : MonoBehaviour
 {
-
-    public static event Action<Sprite> OnItemEquipped;
+    public static event Action<Sprite, string> OnItemEquipped;
     public static event Action<Sprite> OnItemExhausted;
-
-    [Header("Items")]
-    public InventoryItem[] items;
 
     [Header("Settings")]
     public int activeItem = 0;
@@ -35,64 +30,66 @@ public class InventoryManager : MonoBehaviour
     [Header("Input")]
     public InputAction switchAction;
 
-    private Dictionary<string, ItemEntry> inventory = new Dictionary<string, ItemEntry>();
+    private ItemEntry[] slots;
+    private Outline[] itemOutlines;
 
     void Awake()
     {
+        slots = new ItemEntry[maxSlots];
+        itemOutlines = new Outline[itemImages.Length];
+
+        for (int i = 0; i < itemImages.Length; i++)
+        {
+            if (itemImages[i] != null)
+            {
+                itemOutlines[i] = itemImages[i].GetComponent<Outline>();
+            }
+            ClearSlotUI(i);
+        }
+
         Player.OnItemInteraction += OnPlayerInteraction;
         Player.OnItemUsed += OnItemUsed;
     }
 
     void OnPlayerInteraction(InventoryItem item, GameObject obj)
     {
-        if (AddItem(item))
+        if (AddItem(item, obj.tag))
         {
             obj.SetActive(false);
         }
     }
 
-    bool AddItem(InventoryItem item)
+    bool AddItem(InventoryItem item, string tag)
     {
-        if (inventory.Count >= maxSlots - 1)
+        for (int i = 0; i < maxSlots; i++)
         {
-            int totalItems = 0;
-            foreach (ItemEntry entry in inventory.Values)
+            if (slots[i] != null && slots[i].name == item.name && slots[i].count < itemPerSlot)
             {
-                totalItems += entry.count;
-            }
-
-            if (totalItems >= maxSlots * itemPerSlot)
-            {
-                return false;
+                slots[i].count++;
+                UpdateSlotUI(i);
+                return true;
             }
         }
 
-        else
+        for (int i = 0; i < maxSlots; i++)
         {
-            ItemEntry itemEntry;
-            if (inventory.TryGetValue(item.name, out itemEntry))
+            if (slots[i] == null)
             {
-                if (itemEntry.count < itemPerSlot)
+                slots[i] = new ItemEntry
                 {
-                    inventory[item.name].count++;
-                    UpdateItemCountUI(item.name, inventory[item.name].count);
-                    return true;
-                }
+                    name = item.name,
+                    count = 1,
+                    sprite = item.sprite,
+                    category = tag
+                };
 
-                if (itemEntry.count >= itemPerSlot)
+                UpdateSlotUI(i);
+
+                if (i == activeItem)
                 {
-                    return false;
+                    OnItemEquipped?.Invoke(slots[i].sprite, slots[i].category);
+                    SetItemActive();
                 }
-            }
-
-            else
-            {
-                ItemEntry newEntry = new ItemEntry { count = 1, sprite = item.sprite };
-
-                inventory.Add(item.name, newEntry);
-                UpdateItemCountUI(item.name, 1);
-                UpdateItemUI(newEntry);
-
                 return true;
             }
         }
@@ -100,75 +97,26 @@ public class InventoryManager : MonoBehaviour
         return false;
     }
 
-    void UpdateItemUI(ItemEntry item)
+    void OnItemUsed(Sprite usedSprite)
     {
-        foreach (Image image in itemImages)
+        int slotIndex = FindSlotBySprite(usedSprite);
+        if (slotIndex == -1) return;
+
+        slots[slotIndex].count--;
+
+        if (slots[slotIndex].count > 0)
         {
-            if (image.sprite == item.sprite)
-            {
-                UpdateItemCountUI(item.name, 1);
-                return;
-            }
-
-            if (image.sprite == null)
-            {
-                image.sprite = item.sprite;
-                Color color = image.color;
-                color.a = 1f;
-
-                image.color = color;
-                return;
-            }
+            UpdateSlotUI(slotIndex);
         }
-    }
-
-    void UpdateItemCountUI(string itemName, int count)
-    {
-        int itemIndex = inventory.Keys.ToList().IndexOf(itemName);
-        itemCountTexts[itemIndex].text = count.ToString();
-    }
-
-
-    void OnItemUsed(Sprite item)
-    {
-        string[] keys = inventory.Keys.ToArray();
-
-        for (int i = 0; i < itemImages.Count(); i++)
+        else
         {
-            if (itemImages[i].sprite == item)
+            OnItemExhausted?.Invoke(usedSprite);
+            slots[slotIndex] = null;
+            ClearSlotUI(slotIndex);
+
+            if (slotIndex == activeItem)
             {
-                ItemEntry entry;
-                if (inventory.TryGetValue(keys[i], out entry))
-                {
-                    entry.count--;
-                    UpdateItemCountUI(keys[i], entry.count);
-
-                    if (entry.count < 1)
-                    {
-                        OnItemExhausted.Invoke(itemImages[i].sprite);
-                        itemImages[i].sprite = null;
-
-                        Color c = itemImages[i].color;
-                        c.a = 0f;
-                        itemImages[i].color = c;
-
-                        Outline outline = itemImages[i].GetComponent<Outline>();
-                        outline.effectDistance = Vector2.zero;
-                        UpdateItemCountUI(keys[i], 0);
-
-                        inventory.Remove(keys[i]);
-
-                        for(int j=0; j<itemImages.Count(); j++)
-                        {
-                            if(itemImages[j].sprite != null)
-                            {
-                                activeItem = j;
-                                SetItemActive();
-                                OnItemEquipped.Invoke(itemImages[j].sprite);
-                            }
-                        }
-                    }
-                }
+                EquipFirstItem();
             }
         }
     }
@@ -176,64 +124,104 @@ public class InventoryManager : MonoBehaviour
     void SwitchItem(InputAction.CallbackContext ctx)
     {
         float input = ctx.ReadValue<float>();
+        if (Mathf.Abs(input) <= 0.1f) return;
 
-        if (inventory.Count() == 0) return;
+        int direction = input > 0 ? 1 : -1;
 
-        if (input < -.1f && activeItem > 0)
+        for (int step = 1; step <= maxSlots; step++)
         {
-            activeItem--;
-        }
-
-        if (input > 0.1f && activeItem < inventory.Keys.Count - 1)
-        {
-            activeItem++;
-        }
-
-        ItemEntry item;
-        if (inventory.TryGetValue(inventory.Keys.ToList()[activeItem], out item))
-        {
-            Debug.Log(item.sprite.name);
-            OnItemEquipped.Invoke(item.sprite);
-        }
-
-        SetItemActive();
-    }
-
-
-    void SetItemActive()
-    {
-        for (int i = 0; i < itemImages.Length; i++)
-        {
-            if (itemImages[i] == null) continue;
-
-            Outline outline = itemImages[i].GetComponent<Outline>();
-            if (outline != null)
+            int nextIndex = (activeItem + direction * step + maxSlots) % maxSlots;
+            if (slots[nextIndex] != null)
             {
-                if (i == activeItem)
-                {
-                    outline.effectDistance = activeItemEffect;
-                }
-
-                else
-                {
-                    outline.effectDistance = Vector2.zero;
-                }
+                activeItem = nextIndex;
+                OnItemEquipped?.Invoke(slots[activeItem].sprite, slots[activeItem].category);
+                SetItemActive();
+                return;
             }
         }
     }
 
+    void EquipFirstItem()
+    {
+        for (int i = 0; i < maxSlots; i++)
+        {
+            if (slots[i] != null)
+            {
+                activeItem = i;
+                OnItemEquipped?.Invoke(slots[i].sprite, slots[i].category);
+                SetItemActive();
+                return;
+            }
+        }
+
+        activeItem = 0;
+        SetItemActive();
+    }
+
+    void UpdateSlotUI(int index)
+    {
+        ItemEntry entry = slots[index];
+        if (entry == null)
+        {
+            ClearSlotUI(index);
+            return;
+        }
+
+        itemImages[index].sprite = entry.sprite;
+        Color c = itemImages[index].color;
+        c.a = 1f;
+        itemImages[index].color = c;
+
+        itemCountTexts[index].text = entry.count.ToString();
+    }
+
+    void ClearSlotUI(int index)
+    {
+        itemImages[index].sprite = null;
+        Color c = itemImages[index].color;
+        c.a = 0f;
+        itemImages[index].color = c;
+
+        itemCountTexts[index].text = "";
+
+        if (itemOutlines[index] != null)
+        {
+            itemOutlines[index].effectDistance = Vector2.zero;
+        }
+    }
+
+    void SetItemActive()
+    {
+        for (int i = 0; i < itemOutlines.Length; i++)
+        {
+            if (itemOutlines[i] == null) continue;
+
+            bool isSelectedAndFilled = (i == activeItem && slots[i] != null);
+            itemOutlines[i].effectDistance = isSelectedAndFilled ? activeItemEffect : Vector2.zero;
+        }
+    }
+
+    int FindSlotBySprite(Sprite sprite)
+    {
+        if (activeItem >= 0 && activeItem < maxSlots && slots[activeItem]?.sprite == sprite)
+            return activeItem;
+
+        for (int i = 0; i < maxSlots; i++)
+        {
+            if (slots[i]?.sprite == sprite) return i;
+        }
+        return -1;
+    }
 
     void OnEnable()
     {
         switchAction.performed += SwitchItem;
-
         switchAction.Enable();
     }
 
     void OnDisable()
     {
         switchAction.performed -= SwitchItem;
-
         switchAction.Disable();
     }
 
