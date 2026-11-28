@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using Unity.Cinemachine;
 using System.Collections.Generic;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
@@ -33,7 +34,6 @@ public class Player : MonoBehaviour
     public List<AudioClip> heliSounds;
 
     [Header("Body")]
-    public float bodyMass = 80.0f; // in kg
     public float playerHealth = 100f;
     public Transform foot;
     public Transform back;
@@ -60,6 +60,7 @@ public class Player : MonoBehaviour
     public Slider healthSlider;
     public Slider gasSlider;
     public Image crosshair;
+    public TMP_Text massValue;
 
     private SpriteRenderer activeItemSprite;
 
@@ -80,7 +81,7 @@ public class Player : MonoBehaviour
     {
         playerBody = GetComponent<Rigidbody2D>();
         impulseSource = GetComponent<CinemachineImpulseSource>();
-        playerBody.mass = bodyMass;
+        playerBody.mass = 80f;
 
         animator = GetComponent<Animator>();
         animator.SetBool("isRunning", false);
@@ -90,6 +91,8 @@ public class Player : MonoBehaviour
         InputSystem.EnableDevice(Mouse.current);
 
         Cursor.lockState = CursorLockMode.Locked;
+
+        massValue.text = $"{playerBody.mass} KG";
 
         StartCoroutine(IncreaseSlider(healthSlider, playerHealth));
     }
@@ -262,6 +265,7 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        Debug.Log($"Player Mass: {playerBody.mass}");
         FoodItem foodItem = collision.GetComponent<FoodItem>();
         InventoryItemMono item = collision.GetComponent<InventoryItemMono>();
 
@@ -279,6 +283,8 @@ public class Player : MonoBehaviour
             {
                 moveSpeed -= retardValue;
             }
+
+            massValue.text = $"{Mathf.Round(playerBody.mass / 1000)} KG";
 
             Instantiate(eatBurst, collision.transform.position, Quaternion.identity);
             Destroy(collision.gameObject);

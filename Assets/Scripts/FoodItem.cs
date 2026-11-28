@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class FoodItem : MonoBehaviour
@@ -10,6 +11,8 @@ public class FoodItem : MonoBehaviour
         if(collision.gameObject.name == "Player")
         {
             GameObject effect = Instantiate(popEffect, gameObject.transform.position, Quaternion.identity);
+            TMP_Text value = effect.GetComponentInChildren<TMP_Text>();
+            value.text = $"{foodData.massValue} g";
             Destroy(effect, 1f);
         }
     }
