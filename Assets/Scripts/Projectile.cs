@@ -33,16 +33,10 @@ public class Projectile : MonoBehaviour
 
         collider = gameObject.AddComponent<CircleCollider2D>();
         collider.isTrigger = true;
-        collider.radius = 1f;
-
-        // outerCollider = gameObject.AddComponent<CircleCollider2D>();
-        // outerCollider.isTrigger = false;
-        // outerCollider.radius = collider.radius * 1.2f;
-        // outerCollider.enabled = false;
+        collider.radius = .2f;
 
         if (gameObject.tag == "Power Item")
         {
-            Debug.LogError("We got a power item");
             CircleCollider2D outerCollider = gameObject.AddComponent<CircleCollider2D>();
             outerCollider.radius = collider.radius * 1.2f;
             outerCollider.isTrigger = false;
