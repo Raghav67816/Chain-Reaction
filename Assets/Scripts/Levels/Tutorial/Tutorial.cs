@@ -19,4 +19,9 @@ public class Tutorial : MonoBehaviour
     {
         inventoryHotbar.SetActive(true);
     }
+
+    void OnDisable()
+    {
+        HRCCollider.OnPlayerInHRC -= OnPlayerInHRC;
+    }
 }

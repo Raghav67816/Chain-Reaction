@@ -90,6 +90,8 @@ public class Player : MonoBehaviour
         InputSystem.EnableDevice(Mouse.current);
 
         Cursor.lockState = CursorLockMode.Locked;
+
+        StartCoroutine(IncreaseSlider(healthSlider, playerHealth));
     }
 
     void FixedUpdate()
